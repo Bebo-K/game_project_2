@@ -7,7 +7,47 @@
   <body>
     <canvas id="canvas" width="800" height="640"></canvas>
   </body>
-  
-  <script src="game.js"></script>
-  <script src="main.js"></script>
+  <script id="dev_vertex_shader" type="x-shader/x-vertex">
+    precision mediump float;
+
+    uniform mat4 projection_matrix;
+    uniform mat4 modelview_matrix;
+
+    attribute vec3 a_vertex;
+    attribute vec2 a_tex_coord;
+    varying vec2 tex_coord;
+
+    void main(void)
+    {
+      vec4 world_pos = modelview_matrix * vec4(a_vertex, 1.0);
+      gl_Position = projection_matrix * world_pos;
+      tex_coord = a_tex_coord;
+    }
+  </script>
+  <script id="dev_fragment_shader" type="x-shader/x-fragment">
+    precision mediump float;
+
+    uniform sampler2D texture0;
+    uniform vec4 texture_location;
+    uniform vec4 color;
+
+    varying vec2 tex_coord;
+
+    void main(void) {
+      vec2 coord =  tex_coord*texture_location.zw + texture_location.xy;
+      gl_FragColor  = color*texture2D(texture0, coord,0.0);
+    }
+  </script>
+  <script> 
+  //global constants
+     var canvas = document.getElementById("canvas");
+     var gl = canvas.getContext("webgl", { alpha: false });
+  </script>
+  <script src="src/gfx/matrix.js"></script>
+  <script src="src/gfx/renderer.js"></script>
+  <script src="src/gfx/drawable.js"></script>
+  <script src="src/gfx/textures.js"></script>
+  <script src="src/gfx/shader.js"></script>
+  <script src="src/game.js"></script>
+  <script src="src/main.js"></script>
 </html>
