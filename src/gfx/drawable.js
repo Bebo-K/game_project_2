@@ -1,5 +1,5 @@
 
-class CameraCard{
+class Sprite{
 
     constructor(texture_handle,frames,strips){
         this.texture = texture_handle;
