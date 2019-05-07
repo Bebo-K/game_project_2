@@ -4,20 +4,18 @@ class Player{
         this.position = new Position();
         this.position.y = 10;
         this.position.z = 4;
+       
         if(start_position){this.position.SetFrom(start_position);}
+
+        var tex_atlas = game.textures.texture_atlases[0];
+        this.guy_card = new Sprite(game.textures.AddTextureHandle("guy.png",tex_atlas,224,0,48,32),2,1);
 
         var dropshadow_offset = new Position();
         dropshadow_offset.y=8;
         dropshadow_offset.x=-1;
         dropshadow_offset.z=-1;
-        this.drop_shadow = new Sprite(game.textures.GetTextureHandle("dropshadow.png"),1,1,dropshadow_offset);
-        this.drop_shadow.position.xr = 90;
-
-        this.guy_card = new Sprite(game.textures.GetTextureHandle("guy.png"),2,1);
-        this.guy_card.position.x = 10; 
-        this.guy_card.position.y = 8; 
-        this.guy_card.position.z = 0; 
-
+        this.drop_shadow = new Sprite(game.textures.AddTextureHandle("dropshadow.png",tex_atlas,272,0,16,16),1,1,dropshadow_offset);
+            this.drop_shadow.position.xr = 90;
         game.renderer.Register(this.drop_shadow);
         game.renderer.Register(this.guy_card);
     }
@@ -37,11 +35,21 @@ class Player{
             this.guy_card.frame=0;
         }
         this.guy_card.position.SetFrom(this.position);
-        this.drop_shadow.position.SetFrom(this.position);
+        this.drop_shadow.position.SetFrom(this.position);//TODO: project drop shadow to floor.
         this.drop_shadow.position.xr = 90;
         this.drop_shadow.position.xs *= 0.8;
         this.drop_shadow.position.ys *= 0.8;
-        this.drop_shadow.position.zs *= 0.8;        
+        this.drop_shadow.position.zs *= 0.8;       
+
+        
+        state.renderer.camera.x = this.position.x;
+    }
+
+    Unload(game){
+        game.renderer.Unregister(this.drop_shadow);
+        game.renderer.Unregister(this.guy_card);
+        this.guy_card.Unload();
+        this.drop_shadow.Unload();
     }
 
 }

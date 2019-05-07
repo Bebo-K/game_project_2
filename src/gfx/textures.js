@@ -48,9 +48,6 @@ class TextureManager{
         return atlas_id;
     }
 
-    AddTextureHandle(handle_name,atlas_id,x,y,width,height){
-        this.texture_handles.push(new TextureHandle(handle_name,atlas_id,x,y,width,height));
-    }
     GetTextureHandle(handle_name){
         var handle = null;
         for(var i=0;i<this.texture_handles.length;i++){
@@ -60,4 +57,14 @@ class TextureManager{
         }
         return handle;
     }
+
+    AddTextureHandle(handle_name,atlas_id,x,y,width,height){
+        var tex_handle = this.GetTextureHandle(handle_name);
+        if(tex_handle === null){
+            tex_handle = new TextureHandle(handle_name,atlas_id,x,y,width,height)
+            this.texture_handles.push(tex_handle);
+        }
+        return tex_handle;
+    }
+
 }

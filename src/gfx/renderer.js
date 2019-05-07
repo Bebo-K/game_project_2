@@ -60,7 +60,9 @@ class Renderer{
         //this.modelview_matrix.Rotate_X(45);
 
         for(var i=0;i<this.draw_objects.length;i++){
-            this.draw_objects[i].Draw(this.shader,this.modelview_matrix,this.projection_matrix);
+            if(this.draw_objects[i] != null){
+                this.draw_objects[i].Draw(this.shader,this.modelview_matrix,this.projection_matrix);
+            }
         }
     }
 }

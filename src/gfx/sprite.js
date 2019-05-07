@@ -81,4 +81,8 @@ class Sprite{
         gl.drawArrays(gl.TRIANGLES,0,6);
     }
 
+    Unload(){
+        gl.deleteBuffer(this.vertex_buffer);
+        gl.deleteBuffer(this.texcoord_buffer);
+    }
 }
