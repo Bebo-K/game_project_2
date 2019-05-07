@@ -23,7 +23,17 @@ function main() {
 
     //Load libraries here
     game_instance = new Game();
+    document.addEventListener('keydown', input_keydown, false);
+    document.addEventListener('keyup', input_keyup, false);
     window.requestAnimationFrame(game_loop);
+
+}
+
+function input_keydown(event){
+    game_instance.InputEvent(event.keyCode,true);
+}
+function input_keyup(){
+    game_instance.InputEvent(event.keyCode,false);
 }
 
 

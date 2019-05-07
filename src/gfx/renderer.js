@@ -9,7 +9,11 @@ class Renderer{
         this.projection_matrix = new Matrix();
         this.projection_matrix.SetPerspective(this.width,this.height,5,1000,60);
         //this.projection_matrix.SetOrtho(this.width,this.height,5,1000);
-        
+        this.camera = new Position();
+        this.camera.y = 60;
+        this.camera.z = -100;
+        this.camera.xr = -30;
+
         gl.clearColor(0.1, 0.1, 0.1, 1.0);
         gl.enable(gl.BLEND);
         gl.enable(gl.DEPTH_TEST);
@@ -51,7 +55,9 @@ class Renderer{
         gl.enableVertexAttribArray(this.shader.TEXCOORDS);
 
         this.modelview_matrix.SetIdentity();
-        this.modelview_matrix.Translate(0,0,-100);
+        this.camera.ApplyInvToMatrix(this.modelview_matrix);
+        //this.modelview_matrix.Translate(0,0,-100);
+        //this.modelview_matrix.Rotate_X(45);
 
         for(var i=0;i<this.draw_objects.length;i++){
             this.draw_objects[i].Draw(this.shader,this.modelview_matrix,this.projection_matrix);

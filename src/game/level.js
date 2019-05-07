@@ -25,7 +25,6 @@ class Level{
     Draw(shader,modelview_matrix,projection_matrix){
         var i,j;
         var current_modelview = modelview_matrix.Copy();
-        current_modelview.Translate(0,0,-100);
         for(var i=0;i<this.rows;i++){
             for(var j=0;j<this.rows;j++){
                 if(this.tiles[i*16+j]===1){
@@ -62,7 +61,7 @@ class Level{
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
         gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
 
-        gl.drawArrays(gl.TRIANGLES,0,6);
+        gl.drawArrays(gl.TRIANGLES,0,36);
     }
 
     buildTile(texture_handle){
@@ -71,22 +70,92 @@ class Level{
         this.strip=1;
         this.max_frames=14;
         this.max_strips=8;
-        var tile_width = this.texture.width/this.max_frames;
-        var tile_height = this.texture.height/this.max_strips;
+        var w = this.texture.width/(2*this.max_frames);
+        var h = this.texture.height/(2*this.max_strips);
 
         var verts = new Float32Array([
-			-(tile_width/2.0), 0.0,         1.0,
-			 (tile_width/2.0), 0.0,         1.0,
-			 (tile_width/2.0), tile_height, 1.0,
-			 (tile_width/2.0), tile_height, 1.0,
-			-(tile_width/2.0), tile_height, 1.0,
-			-(tile_width/2.0), 0.0,         1.0
+			-w, -h, w,    //Front
+			 w, -h, w,
+			 w,  h, w,
+			 w,  h, w,
+			-w,  h, w,
+            -w, -h, w,
+
+			-w, -h, -w,    //Back
+			 w, -h, -w,
+			 w,  h, -w,
+			 w,  h, -w,
+			-w,  h, -w,
+            -w, -h, -w,
+
+			-w,  h, -w,    //Top
+			 w,  h, -w,
+			 w,  h,  w,
+			 w,  h,  w,
+			-w,  h,  w,
+            -w,  h, -w,
+
+            -w, -h, -w,    //Bottom
+             w, -h, -w,
+             w, -h,  w,
+             w, -h,  w,
+            -w, -h,  w,
+            -w, -h, -w,
+
+            -w, -h, -w,    //Left
+            -w,  h, -w,
+            -w,  h,  w,
+            -w,  h,  w,
+            -w, -h,  w,
+            -w, -h, -w,
+
+             w, -h, -w,    //Right
+             w,  h, -w,
+             w,  h,  w,
+             w,  h,  w,
+             w, -h,  w,
+             w, -h, -w,
         ]);
 
         this.texture_tile_width = this.texture.texture_w/this.max_frames;
         this.texture_tile_height = this.texture.texture_h/this.max_strips;
 
         var texcoords = new Float32Array([
+			0.005,0.995,
+			0.995,0.995,
+			0.995,0.005,
+			0.995,0.005,
+			0.005,0.005,
+            0.005,0.995,
+            
+			0.005,0.995,
+			0.995,0.995,
+			0.995,0.005,
+			0.995,0.005,
+			0.005,0.005,
+            0.005,0.995,
+            
+			0.005,0.995,
+			0.995,0.995,
+			0.995,0.005,
+			0.995,0.005,
+			0.005,0.005,
+            0.005,0.995,
+            
+			0.005,0.995,
+			0.995,0.995,
+			0.995,0.005,
+			0.995,0.005,
+			0.005,0.005,
+            0.005,0.995,
+            
+			0.005,0.995,
+			0.995,0.995,
+			0.995,0.005,
+			0.995,0.005,
+			0.005,0.005,
+            0.005,0.995,
+            
 			0.005,0.995,
 			0.995,0.995,
 			0.995,0.005,

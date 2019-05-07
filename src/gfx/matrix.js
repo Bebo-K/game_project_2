@@ -60,15 +60,48 @@ class Matrix{
         this.MultiplyBy(scale_matrix);
     }
     Rotate(x,y,z){
+        if(x != 0){Rotate_X(x);}
+        if(y != 0){Rotate_Y(y);}
+        if(z != 0){Rotate_Z(z);}
+    }
+    Rotate_X(theta){
         var rotate_matrix = new Matrix();
+        var rx = -theta*Math.PI/180;
+        var cos = Math.cos(rx);
+        var sin = Math.sin(rx);
         rotate_matrix.Set([
-                            x,0,0,0,
-                            0,y,0,0,
-                            0,0,z,0,
-                            0,0,0,1
-        ]);
+			1,      0,	    0,      0,
+			0,      cos,    -sin,   0,
+			0,      sin,    cos,    0,
+            0,      0,      0,      1]);
         this.MultiplyBy(rotate_matrix);
     }
+    Rotate_Y(theta){
+        var rotate_matrix = new Matrix();
+        var ry = -theta*Math.PI/180;
+        var cos = Math.cos(ry);
+        var sin = Math.sin(ry);
+        rotate_matrix.Set([
+			cos,    0,      sin,    0,
+			0,      1,      0,      0,
+			-sin,   0,      cos,    0,
+            0,      0,      0,      1]);
+        this.MultiplyBy(rotate_matrix);
+    }
+    Rotate_Z(theta){
+        var rotate_matrix = new Matrix();
+        var rz = -theta*Math.PI/180;
+        var cos = Math.cos(rz);
+        var sin = Math.sin(rz);
+        rotate_matrix.Set([
+			cos,    -sin,	0,      0,
+			sin,    cos,    0,      0,
+			0,      0,      1,      0,
+            0,      0,      0,      1]);
+        this.MultiplyBy(rotate_matrix);
+    }
+
+
     SetIdentity(){
         this.Set([1,0,0,0,  0,1,0,0, 0,0,1,0,  0,0,0,1]);
     }

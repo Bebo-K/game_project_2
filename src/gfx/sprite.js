@@ -1,13 +1,24 @@
 
 class Sprite{
 
-    constructor(texture_handle,frames,strips){
+    constructor(texture_handle,frames,strips,offset){
+        this.position = new Position();
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();
         this.texcoord_buffer = gl.createBuffer();
 
         var sprite_width = texture_handle.width/frames;
         var sprite_height = texture_handle.height/strips;
+
+        var offset_x = 0;
+        var offset_y = 0;
+        var offset_z = 0;
+        if(offset){
+            offset_x = offset.x;
+            offset_y = offset.y;
+            offset_z = offset.z;
+        }
+
         this.frame=0;
         this.strip=0;
         this.max_frames=frames;
@@ -16,12 +27,12 @@ class Sprite{
         this.sprite_height = this.texture.texture_h/this.max_strips;
 
         var verts = new Float32Array([
-			-sprite_width/2.0,	0,				0,
-			sprite_width/2.0,	0,				0,
-			sprite_width/2.0,	sprite_height,	0,
-			sprite_width/2.0,	sprite_height,	0,
-			-sprite_width/2.0,	sprite_height,	0,
-			-sprite_width/2.0,	0,				0
+			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z,
+			 sprite_width/2.0-offset_x,	-offset_y,				-offset_z,
+			 sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
+			 sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
+			-sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
+			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z
         ]);
         var texcoords = new Float32Array([
 			0.005,0.995,
@@ -41,8 +52,10 @@ class Sprite{
     }
 
     Draw(shader,modelview_matrix,projection_matrix){
+        var local_space = modelview_matrix.Copy();
+        this.position.ApplyToMatrix(local_space);
 
-        gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,modelview_matrix.Get(true));
+        gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,local_space.Get(true));
         gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
 
         gl.activeTexture(gl.TEXTURE0);
