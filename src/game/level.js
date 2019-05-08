@@ -1,8 +1,14 @@
 
 class Level{
 
-    constructor(source,tileset_handle){
+    constructor(game,source){
+        var tex_atlas = game.textures.texture_atlases[0];//TODO: search when we have multiple atlases.
+        var tileset_texture = game.textures.AddTextureHandle("tileset.png",tex_atlas,0,0,224,128);
+        this.tile_manager = new TileManager(tileset_texture,14,8);
         this.tiles=[];
+        this.tile_types = [];
+            this.tile_types.push(new TileType("solid ground",))//TODO: start here
+
         this.rows =16;
         this.columns = 16;
 
