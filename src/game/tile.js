@@ -34,8 +34,8 @@ class TileManager{
         var side_verts = new Float32Array([
             -w, -h,  w,   w, -h,  w,   w,  h,  w,    w,  h,  w,  -w,  h,  w,  -w, -h,  w,//Front
             -w, -h, -w,   w, -h, -w,   w,  h, -w,    w,  h, -w,  -w,  h, -w,  -w, -h, -w,//Back
-            -w, -h, -w,  -w,  h, -w,  -w,  h,  w,   -w,  h,  w,  -w, -h,  w,  -w, -h, -w,//Left
-             w, -h, -w,   w,  h, -w,   w,  h,  w,    w,  h,  w,   w, -h,  w,   w, -h, -w //Right
+            -w, -h, -w,  -w, -h,  w,  -w,  h,  w,   -w,  h,  w,  -w,  h, -w,  -w, -h, -w,//Left
+             w, -h, -w,   w, -h,  w,   w,  h,  w,    w,  h,  w,   w,  h, -w,   w, -h, -w //Right
         ]);
 
         var cap_texcoords = new Float32Array([
@@ -67,6 +67,7 @@ class TileManager{
     }
     
     DrawTile(type,shader,modelview_matrix,projection_matrix){
+        if(type === null)return;
         gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,modelview_matrix.Get(true));
         gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
     
@@ -84,22 +85,22 @@ class TileManager{
             this.frame_h]);
         gl.uniform4fv(shader.TEXTURE_LOCATION,tex_location);
     
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.sides_vertex_buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.side_vertex_buffer);
         gl.vertexAttribPointer(shader.VERTICES,3,gl.FLOAT,false,0,0);
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.sides_texcoord_buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.side_texcoord_buffer);
         gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
-        gl.drawArrays(gl.TRIANGLES,0,36);
+        gl.drawArrays(gl.TRIANGLES,0,24);
         
     
         tex_location[0] = this.texture.texture_x+(this.frame_w*type.cap_frame);
         tex_location[1] = this.texture.texture_y+(this.frame_h*type.cap_strip);
         gl.uniform4fv(shader.TEXTURE_LOCATION,tex_location);
     
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.caps_vertex_buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.cap_vertex_buffer);
         gl.vertexAttribPointer(shader.VERTICES,3,gl.FLOAT,false,0,0);
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.caps_texcoord_buffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.cap_texcoord_buffer);
         gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
-        gl.drawArrays(gl.TRIANGLES,0,36);
+        gl.drawArrays(gl.TRIANGLES,0,12);
     }
 }
 

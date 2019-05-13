@@ -5,7 +5,7 @@ class Room{
     }
 
     Load(game) {
-        game.level = new Level(document.getElementById("dev_level").text);
+        game.level = new Level(game,document.getElementById("dev_level").text);
         game.renderer.Register(game.level);
 
         game.entities.push(new Player(game));

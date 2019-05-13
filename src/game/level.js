@@ -7,7 +7,8 @@ class Level{
         this.tile_manager = new TileManager(tileset_texture,14,8);
         this.tiles=[];
         this.tile_types = [];
-            this.tile_types.push(new TileType("solid ground",))//TODO: start here
+            this.tile_types.push(null);
+            this.tile_types.push(new TileType("solid ground",0,2,10,1,true));
 
         this.rows =16;
         this.columns = 16;
@@ -21,19 +22,15 @@ class Level{
                 this.tiles.push(1);
             }
         }
-        
-        this.texture = tileset_handle;
-        this.buildTile(tileset_handle);
     }
 
     Draw(shader,modelview_matrix,projection_matrix){
         var i,j;
         var current_modelview = modelview_matrix.Copy();
+        current_modelview.Translate(0,16*this.columns,0);
         for(var i=0;i<this.rows;i++){
             for(var j=0;j<this.rows;j++){
-                if(this.tiles[i*16+j]===1){
-                    this.DrawTile(shader,current_modelview,projection_matrix);
-                }
+                this.tile_manager.DrawTile(this.tile_types[this.tiles[i*16+j]],shader,current_modelview,projection_matrix);
                 current_modelview.Translate(16,0,0);
             }
             current_modelview.Translate(-16*this.rows,-16,0);

@@ -10,7 +10,7 @@ class Renderer{
         this.projection_matrix.SetPerspective(this.width,this.height,5,1000,60);
         //this.projection_matrix.SetOrtho(this.width,this.height,5,1000);
         this.camera = new Position();
-        this.camera.y = 60;
+        this.camera.y = 64;
         this.camera.z = -100;
         this.camera.xr = -30;
 

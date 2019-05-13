@@ -2,8 +2,12 @@ class Player{
 
     constructor(game,start_position){
         this.position = new Position();
-        this.position.y = 10;
+        this.position.x = 16;
+        this.position.y = 80;
         this.position.z = 4;
+        this.velocity = new Vec3();
+        this.height = 32;
+        this.radius = 6;
        
         if(start_position){this.position.SetFrom(start_position);}
 
@@ -22,16 +26,17 @@ class Player{
 
     Update(state,delta){
         if(state.input.left===true){
-            this.position.x -= 0.08*delta;
+            this.velocity.x = -0.08;
             this.position.xs = -1;
             this.guy_card.frame=1;
         }
         else if(state.input.right===true){
-            this.position.x += 0.08*delta;
+            this.velocity.x = 0.08;
             this.position.xs = 1;
             this.guy_card.frame=1;
         }
         else{
+            this.velocity.x = 0.0;
             this.guy_card.frame=0;
         }
         this.guy_card.position.SetFrom(this.position);
@@ -43,6 +48,7 @@ class Player{
 
         
         state.renderer.camera.x = this.position.x;
+        state.renderer.camera.y = this.position.y+64;
     }
 
     Unload(game){
