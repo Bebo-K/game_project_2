@@ -4,7 +4,7 @@ class Game{
     constructor(){
         this.renderer = new Renderer();
         this.textures = new TextureManager();
-        this.collision = new Collision();
+        this.physics = new Physics();
             this.textures.AddAtlas("/img/atlas_1.png");
         this.input = new Input();
         this.level = null;
@@ -17,8 +17,9 @@ class Game{
     Update (delta) {
         this.timer += delta;
         for(var e=0;e<this.entities.length;e++){
+            this.physics.Update(this,this.entities[e],delta);
             this.entities[e].Update(this,delta);
-            this.collision.Update(this,this.entities[e],delta);
+            
         }
 
     }

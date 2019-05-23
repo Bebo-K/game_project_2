@@ -1,4 +1,7 @@
 
+var ENFORCE_BOUNDS = true;
+
+
 class Level{
 
     constructor(game,source){
@@ -40,5 +43,54 @@ class Level{
     Unload(){
         gl.deleteBuffer(this.vertex_buffer);
         gl.deleteBuffer(this.texcoord_buffer);
+    }
+
+    RunCollisionStep(entity,step_position,step_velocity){
+        step_result = new CollisionResult();
+        
+        entity.out_of_bounds = true;	
+        
+        step_result = this.CollideWithTilesInRange(entity,step_position,step_velocity);
+        
+        HandleCollisionResults(e,level,step,step_result);
+        
+        if(ENFORCE_BOUNDS && entity.out_of_bounds){//out of bounds, stop horizontal velocity
+            e.loc.velocity.x =0;
+            e.loc.velocity.z =0;
+            step_velocity.x =0;
+            step_velocity.z =0;
+            e.loc.position.Add(step_velocity); 
+        }else{
+            step_position.x += step_velocity.x;
+            step_position.y += step_velocity.y;
+            step_position.z += step_velocity.z;
+
+            e.loc.position.Add(step.shunt);
+            e.loc.position.Add(step.movement); 
+        }
+        return step_result;
+    }
+    CollideWithTilesInRange(entity,step_position,step_velocity){
+        var x_lo_index = Math.floor((step_position.x+entity.radius)/TILE_WIDTH);
+        var x_hi_index = Math.ceil((step_position.x+entity.radius)/TILE_WIDTH)
+        var y_lo_index = Math.floor(step_position.y/TILE_HEIGHT);
+        var y_hi_index = Math.ceil((step_position.y+entity.height)/TILE_HEIGHT);
+
+        if(x_lo_index < 0){x_lo_index=0;}
+        if(y_lo_index < 0){y_lo_index=0;}
+        if(x_hi_index < 0)return;//well out of bounds, give up.
+        if(y_hi_index < 0)return;
+
+        if(x_hi_index >= game.level.rows){x_hi_index=game.level.rows-1;}
+        if(y_hi_index >= game.level.columns){y_hi_index=game.level.columns-1;}
+        if(x_lo_index  >= game.level.rows)return;
+        if(y_lo_index >= game.level.columns)return;
+
+        for(var x=x_lo_index;x <= x_hi_index;x++){
+            for(var y=y_lo_index;y <= y_hi_index;y++){
+
+
+            }
+        }
     }
 }

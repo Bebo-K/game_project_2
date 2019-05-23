@@ -36,7 +36,7 @@ class Player{
             this.guy_card.frame=1;
         }
         else{
-            this.velocity.x = 0.0;
+            //this.velocity.x = 0.0;
             this.guy_card.frame=0;
         }
         this.guy_card.position.SetFrom(this.position);
