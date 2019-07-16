@@ -21,7 +21,6 @@ function main() {
         return;
     }
 
-    //Load libraries here
     game_instance = new Game();
     document.addEventListener('keydown', input_keydown, false);
     document.addEventListener('keyup', input_keyup, false);

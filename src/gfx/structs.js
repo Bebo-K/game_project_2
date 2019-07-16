@@ -1,4 +1,10 @@
-
+class Vec3{
+    constructor(x,y,z){
+        this.x=x;
+        this.y=y;
+        this.z=z;
+    }
+}
 
 class Matrix{
 
@@ -39,30 +45,30 @@ class Matrix{
     }
 
 
-    Translate(x,y,z){
+    Translate(vec){
         var translate_matrix = new Matrix();
         translate_matrix.Set([
-                            1,0,0,x,
-                            0,1,0,y,
-                            0,0,1,z,
+                            1,0,0,vec.x,
+                            0,1,0,vec.y,
+                            0,0,1,vec.z,
                             0,0,0,1
         ]);
         this.MultiplyBy(translate_matrix);
     }
-    Scale(x,y,z){
+    Scale(vec){
         var scale_matrix = new Matrix();
         scale_matrix.Set([
-                            x,0,0,0,
-                            0,y,0,0,
-                            0,0,z,0,
-                            0,0,0,1
+            vec.x,0,0,0,
+            0,vec.y,0,0,
+            0,0,vec.z,0,
+            0,0,0,1
         ]);
         this.MultiplyBy(scale_matrix);
     }
-    Rotate(x,y,z){
-        if(x != 0){Rotate_X(x);}
-        if(y != 0){Rotate_Y(y);}
-        if(z != 0){Rotate_Z(z);}
+    Rotate(vec){
+        if(x != 0){Rotate_X(vec.x);}
+        if(y != 0){Rotate_Y(vec.y);}
+        if(z != 0){Rotate_Z(vec.z);}
     }
     Rotate_X(theta){
         var rotate_matrix = new Matrix();

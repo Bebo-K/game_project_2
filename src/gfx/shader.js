@@ -1,12 +1,44 @@
 
+const vert_program_string = `
+precision mediump float;
+
+uniform mat4 projection_matrix;
+uniform mat4 modelview_matrix;
+
+attribute vec3 a_vertex;
+attribute vec2 a_tex_coord;
+varying vec2 tex_coord;
+
+void main(void)
+{
+  vec4 world_pos = modelview_matrix * vec4(a_vertex, 1.0);
+  gl_Position = projection_matrix * world_pos;
+  tex_coord = a_tex_coord;
+}
+`
+
+const frag_program_string = `
+precision mediump float;
+
+uniform sampler2D texture0;
+uniform vec4 texture_location;
+uniform vec4 color;
+
+varying vec2 tex_coord;
+
+void main(void) {
+  vec2 coord =  tex_coord*texture_location.zw + texture_location.xy;
+  gl_FragColor  = color*texture2D(texture0, coord,0.0);
+}`
+
 class Shader{
 
     constructor(){
         var vert_program = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vert_program,document.getElementById("dev_vertex_shader").text);
+        gl.shaderSource(vert_program,vert_program_string);
 
         var frag_program = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(frag_program,document.getElementById("dev_fragment_shader").text);
+        gl.shaderSource(frag_program,frag_program_string);
 
         gl.compileShader(vert_program);
         var compiled = gl.getShaderParameter(vert_program, gl.COMPILE_STATUS);
