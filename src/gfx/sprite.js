@@ -2,7 +2,13 @@
 class Sprite{
 
     constructor(texture_handle,frames,strips,offset){
-        this.position = new Position();
+
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.rotation = new Vec3();
+        this.scale = new Vec3();
+
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();
         this.texcoord_buffer = gl.createBuffer();
@@ -45,15 +51,14 @@ class Sprite{
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
         gl.bufferData(gl.ARRAY_BUFFER,verts,gl.STATIC_DRAW);
-
-        
+    
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
         gl.bufferData(gl.ARRAY_BUFFER,texcoords,gl.STATIC_DRAW);
     }
 
     Draw(shader,modelview_matrix,projection_matrix){
         var local_space = modelview_matrix.Copy();
-        this.position.ApplyToMatrix(local_space);
+        local_space.TransformToSpace(this);
 
         gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,local_space.Get(true));
         gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
@@ -80,9 +85,5 @@ class Sprite{
 
         gl.drawArrays(gl.TRIANGLES,0,6);
     }
-
-    Unload(){
-        gl.deleteBuffer(this.vertex_buffer);
-        gl.deleteBuffer(this.texcoord_buffer);
-    }
 }
+Sprite.prototype.Unload = Primitive_Unload;

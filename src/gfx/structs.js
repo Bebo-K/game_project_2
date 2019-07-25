@@ -44,6 +44,16 @@ class Matrix{
         for(var i=0;i<this.m.length;i++){this.m[i]=new_m[i];}
     }
 
+    Translate(x,y,z){
+        var translate_matrix = new Matrix();
+        translate_matrix.Set([
+                            1,0,0,x,
+                            0,1,0,y,
+                            0,0,1,z,
+                            0,0,0,1
+        ]);
+        this.MultiplyBy(translate_matrix);
+    }
 
     Translate(vec){
         var translate_matrix = new Matrix();
@@ -64,11 +74,6 @@ class Matrix{
             0,0,0,1
         ]);
         this.MultiplyBy(scale_matrix);
-    }
-    Rotate(vec){
-        if(x != 0){Rotate_X(vec.x);}
-        if(y != 0){Rotate_Y(vec.y);}
-        if(z != 0){Rotate_Z(vec.z);}
     }
     Rotate_X(theta){
         var rotate_matrix = new Matrix();
@@ -106,7 +111,11 @@ class Matrix{
             0,      0,      0,      1]);
         this.MultiplyBy(rotate_matrix);
     }
-
+    Rotate(vec){
+        if(vec.x != 0){this.Rotate_X(vec.x);}
+        if(vec.y != 0){this.Rotate_Y(vec.y);}
+        if(vec.z != 0){this.Rotate_Z(vec.z);}
+    }
 
     SetIdentity(){
         this.Set([1,0,0,0,  0,1,0,0, 0,0,1,0,  0,0,0,1]);
@@ -160,6 +169,12 @@ class Matrix{
         else{
             return this.m;
         }
+    }
+
+    TransformToSpace(object){
+        this.Translate(object.x,object.y,object.z);
+        this.Rotate(object.rotation);
+        this.Scale(object.scale);
     }
 
 }

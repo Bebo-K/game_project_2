@@ -36,7 +36,7 @@ class Renderer{
         gl.viewport(0,0,this.width,this.height);
     }
 
-    Register(drawable){
+    Add(drawable){
         var first_empty_slot = -1;
         for(var i=0;i<this.draw_objects.length;i++){
             if(drawable === this.draw_objects[i])return;
@@ -52,7 +52,7 @@ class Renderer{
         }
     }
 
-    Unregister(drawable){
+    Remove(drawable){
         for(var i=0;i<this.draw_objects.length;i++){
             if(drawable === this.draw_objects[i]){
                 this.draw_objects[i] = null;
