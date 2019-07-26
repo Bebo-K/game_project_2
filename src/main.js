@@ -20,7 +20,6 @@ function main() {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
         return;
     }
-
     game_instance = new Game();
     document.addEventListener('keydown', input_keydown, false);
     document.addEventListener('keyup', input_keyup, false);

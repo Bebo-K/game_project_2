@@ -54,17 +54,6 @@ class Matrix{
         ]);
         this.MultiplyBy(translate_matrix);
     }
-
-    Translate(vec){
-        var translate_matrix = new Matrix();
-        translate_matrix.Set([
-                            1,0,0,vec.x,
-                            0,1,0,vec.y,
-                            0,0,1,vec.z,
-                            0,0,0,1
-        ]);
-        this.MultiplyBy(translate_matrix);
-    }
     Scale(vec){
         var scale_matrix = new Matrix();
         scale_matrix.Set([
@@ -175,6 +164,14 @@ class Matrix{
         this.Translate(object.x,object.y,object.z);
         this.Rotate(object.rotation);
         this.Scale(object.scale);
+    }
+
+    MultiplyVec(vec){
+        var newvec = new Vec3(0,0,0);
+        newvec.x = this.m[0]*vec.x + this.m[1]*vec.y + this.m[2]* vec.z + this.m[3];
+        newvec.y = this.m[4]*vec.x + this.m[5]*vec.y + this.m[6]* vec.z + this.m[7];
+        newvec.z = this.m[8]*vec.x + this.m[9]*vec.y + this.m[10]*vec.z + this.m[11];
+        return newvec;
     }
 
 }

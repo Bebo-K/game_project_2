@@ -6,7 +6,7 @@ class Camera{
         this.height = 640;
         this.fov = 60;
         this.near = 0.1;
-        this.far = 1000.0;
+        this.far = 100.0;
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -64,7 +64,7 @@ class Renderer{
         this.camera.shader.Use();
         this.modelview_matrix.SetIdentity();
         if(this.camera.ortho){
-            this.projection_matrix.setOrtho(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
+            this.projection_matrix.SetOrtho(this.camera.width,this.camera.height,this.camera.near,this.camera.far);
         }
         else{
             this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
@@ -72,6 +72,7 @@ class Renderer{
         
         gl.enableVertexAttribArray(this.camera.shader.VERTICES);
         gl.enableVertexAttribArray(this.camera.shader.TEXCOORDS);
+        gl.cullFace(gl.FRONT_AND_BACK);
 
         this.camera.SetToCameraSpace(this.modelview_matrix);
 

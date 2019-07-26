@@ -30,17 +30,16 @@ class Input{
             case 75: this.debug2=fire;break;
             default:break;
         }
-        this.setInputAxis();
-
+        this.setVirtualJoystick();
     }
 
-    setVirtualJoystick(left,right,up,down){
+    setVirtualJoystick(){
         this.horizontal = 0.0;
         this.vertical = 0.0;
-        if(left){this.horizontal -= 1.0;}
-        if(right){this.horizontal += 1.0;}
-        if(up){this.vertical += 1.0}
-        if(down){this.vertical -= 1.0}
+        if(this.left){this.horizontal -= 1.0;}
+        if(this.right){this.horizontal += 1.0;}
+        if(this.up){this.vertical += 1.0}
+        if(this.down){this.vertical -= 1.0}
 
         let length_sqr = this.horizontal*this.horizontal + this.vertical*this.vertical;
         if(length_sqr > 1.0){
