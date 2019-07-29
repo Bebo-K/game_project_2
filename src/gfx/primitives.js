@@ -1,14 +1,14 @@
 
 function Primitive_Draw(shader,modelview_matrix,projection_matrix){
         var local_space = modelview_matrix.Copy();
-        local_space.TransformToSpace(this);
+        //local_space.TransformToSpace(this);
 
         gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,local_space.Get(false));
         gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(false));
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D,this.texture.gl_id);
-        gl.uniform1i(shader.TEXTURE_0,0);
+        gl.uniform1i(shader.TEXTURE0,0);
 
         var tex_location = new Float32Array([
             this.texture.texture_x,
@@ -17,18 +17,13 @@ function Primitive_Draw(shader,modelview_matrix,projection_matrix){
             this.texture.texture_h]);
         gl.uniform4fv(shader.TEXTURE_LOCATION,tex_location);
 
-        var color = [1,1,1,1];
-        gl.uniform4fv(shader.COLOR,color);
-
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
         gl.vertexAttribPointer(shader.VERTICES,3,gl.FLOAT,false,0,0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
         gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
 
-        //gl.drawArrays(gl.TRIANGLES,0,this.vert_count);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index_buffer);
-        gl.drawElements(gl.TRIANGLES, this.index_count, gl.UNSIGNED_SHORT, 0);
+        gl.drawArrays(gl.TRIANGLES,0,this.vertex_count);
     }
 function Primitive_Unload(){
     gl.deleteBuffer(this.vertex_buffer);
@@ -56,8 +51,6 @@ class CylinderPrimitive{
         var tex_coords = [];
         var theta1, theta2;
         var fraction1,fraction2;
-
-        this.vert_count =  rings*12;
 
         for(var i=0;i< rings;i++){ 
             fraction1 = i/rings; 
@@ -100,9 +93,11 @@ class CylinderPrimitive{
             tex_coords.push(0.75 + 0.25*cos2,0.25 + 0.25*sin2);
             verts.push(0,0,0);
             tex_coords.push(0.75,0.25);
+
+            indices.push(0,1,2,  0,2,3)
         }
-        
-        
+    
+        this.vertex_count = verts.length/3;
         this.vertices = Float32Array.from(verts);
         this.texture_coords = Float32Array.from(tex_coords);
 
@@ -138,44 +133,62 @@ class CubePrimitive{
         var z = this.depth/2;
 
         var verts =[
-            -x, -y,  z,   x, -y,  z,   x,  y,  z,  -x,  y,  z,// Front face
-            -x, -y, -z,  -x,  y, -z,   x,  y, -z,   x, -y, -z,// Back face
-            -x,  y, -z,  -x,  y,  z,   x,  y,  z,   x,  y, -z,// Top face
-            -x, -y, -z,   x, -y, -z,   x, -y,  z,  -x, -y,  z,// Bottom face
-             x, -y, -z,   x,  y, -z,   x,  y,  z,   x, -y,  z,// Right face
-            -x, -y, -z,  -x, -y,  z,  -x,  y,  z,  -x,  y, -z// Left face
+            -x, -y,  z,   x, -y,  z,   x,  y,  z,    -x, -y,  z,   x,  y,  z,  -x,  y,  z,// Front face
+            -x, -y, -z,  -x,  y, -z,   x,  y, -z,    -x, -y, -z,   x,  y, -z,   x, -y, -z,// Back face
+            -x,  y, -z,  -x,  y,  z,   x,  y,  z,    -x,  y, -z,   x,  y,  z,   x,  y, -z,// Top face
+            -x, -y, -z,   x, -y, -z,   x, -y,  z,    -x, -y, -z,   x, -y,  z,  -x, -y,  z,// Bottom face
+             x, -y, -z,   x,  y, -z,   x,  y,  z,     x, -y, -z,   x,  y,  z,   x, -y,  z,// Right face
+            -x, -y, -z,  -x, -y,  z,  -x,  y,  z,    -x, -y, -z,  -x,  y,  z,  -x,  y, -z// Left face
           ]
         
         var tex_coords = [
-            -1.0, -1.0,   1.0, -1.0,   1.0,  1.0,  -1.0,  1.0,// Front face
-            -1.0, -1.0,  -1.0,  1.0,   1.0,  1.0,   1.0, -1.0,// Back face     
-            -1.0,  1.0,  -1.0,  1.0,   1.0,  1.0,   1.0,  1.0,// Top face
-            -1.0, -1.0,   1.0, -1.0,   1.0, -1.0,  -1.0, -1.0,// Bottom face
-             1.0, -1.0,   1.0,  1.0,   1.0,  1.0,   1.0, -1.0,// Right face
-            -1.0, -1.0,  -1.0, -1.0,  -1.0,  1.0,  -1.0,  1.0,// Left face
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Front
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Back
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Top
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Bottom
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Right
+            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0 //Left
         ];
 
-        var indices = [
-            0,1,2,    0,2,3,    4,5,6,    4,6,7,
-            8,9,10,   8,10,11,  12,13,14, 12,14,15,
-            16,17,18, 16,18,19, 20,21,22, 20,22,23 
-        ];
-
+        this.vertex_count = verts.length/3;
         var vertices = Float32Array.from(verts);
         var texture_coords = Float32Array.from(tex_coords);
-        var index_array = new Uint16Array(indices);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
         gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
         gl.bufferData(gl.ARRAY_BUFFER,texture_coords,gl.STATIC_DRAW);
-        this.index_count = indices.length;
-
-       
-         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.index_buffer);
-         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, index_array, gl.STATIC_DRAW);
     }
 }
 CubePrimitive.prototype.Draw = Primitive_Draw;
 CubePrimitive.prototype.Unload = Primitive_Unload;
+
+class TestPrimitive{
+    constructor(texture_handle){
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.rotation = new Vec3(0,0,0);
+        this.scale = new Vec3(1,1,1);
+        
+        this.texture = texture_handle;
+        this.vertex_buffer = gl.createBuffer();
+        this.texcoord_buffer = gl.createBuffer();
+
+        var verts =[1.0,0.0,0.0,  0.0,0.0,0.0,   0.0,1.0,0.0];
+        var tex_coords = [0.0, 0.0,   1.0, -1.0,   1.0,  1.0];
+
+        this.vertex_count = verts.length/3;
+        var vertices = Float32Array.from(verts);
+        var texture_coords = Float32Array.from(tex_coords);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER,texture_coords,gl.STATIC_DRAW);
+    }
+};
+TestPrimitive.prototype.Draw = Primitive_Draw;
+TestPrimitive.prototype.Unload = Primitive_Unload;

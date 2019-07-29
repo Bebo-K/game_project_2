@@ -7,13 +7,11 @@ class Game{
         this.textures = new TextureManager();
             var atlas_id = this.textures.AddAtlas("/img/atlas_1.png");
         
-        var cylinder_tex = this.textures.AddTextureHandle("barrel",atlas_id,0,100,100,100);
-        var sprite_tex = this.textures.AddTextureHandle("sprite",atlas_id,0,0,32,32);
+        var cylinder_tex = this.textures.AddTextureHandle("barrel",atlas_id,0,0,64,64);
 
-        this.scene_renderer.camera.z = 5;
+        this.scene_renderer.camera.z = 1.0;
 
         this.cylinder = new CubePrimitive(1,1,1,cylinder_tex);
-        this.sprite = new Sprite(sprite_tex,1,1);
 
         this.scene_renderer.Add(this.cylinder);
             
@@ -26,6 +24,7 @@ class Game{
 
     Paint(){
         gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+        
         this.scene_renderer.Paint();
         //this.ui_renderer.Paint();
     }

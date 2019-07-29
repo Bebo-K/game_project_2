@@ -12,6 +12,7 @@ class Camera{
         this.z = 0;
         this.rotation = new Vec3(0,0,0);
         this.shader = new Shader();
+        gl.viewport(0,0,this.width,this.height);
     }
     SetToCameraSpace(mat){
         mat.Translate(-this.x,-this.y,-this.z);
@@ -31,9 +32,8 @@ class Renderer{
 
         gl.clearColor(0.1, 0.1, 0.1, 1.0);
         gl.enable(gl.BLEND);
-        gl.enable(gl.DEPTH_TEST);
         gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-        gl.viewport(0,0,this.width,this.height);
+        gl.enable(gl.DEPTH_TEST);
     }
 
     Add(drawable){
@@ -67,14 +67,13 @@ class Renderer{
             this.projection_matrix.SetOrtho(this.camera.width,this.camera.height,this.camera.near,this.camera.far);
         }
         else{
-            this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
+            //this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
         }
         
         gl.enableVertexAttribArray(this.camera.shader.VERTICES);
         gl.enableVertexAttribArray(this.camera.shader.TEXCOORDS);
-        gl.cullFace(gl.FRONT_AND_BACK);
 
-        this.camera.SetToCameraSpace(this.modelview_matrix);
+        //this.camera.SetToCameraSpace(this.modelview_matrix);
 
         for(var i=0;i<this.draw_objects.length;i++){
             if(this.draw_objects[i] != null){
