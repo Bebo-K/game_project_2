@@ -5,7 +5,7 @@ class Camera{
         this.width = 800;
         this.height = 640;
         this.fov = 60;
-        this.near = 0.1;
+        this.near = 1.0;
         this.far = 100.0;
         this.x = 0;
         this.y = 0;
@@ -63,21 +63,22 @@ class Renderer{
     Paint(){
         this.camera.shader.Use();
         this.modelview_matrix.SetIdentity();
-        if(this.camera.ortho){
-            this.projection_matrix.SetOrtho(this.camera.width,this.camera.height,this.camera.near,this.camera.far);
+        if(this.camera.ortho == true){
+            var aspect_ratio = this.camera.width/this.camera.height;
+            this.projection_matrix.SetOrtho(aspect_ratio*10,10,this.camera.near,this.camera.far);
         }
         else{
-            //this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
+            this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
         }
         
         gl.enableVertexAttribArray(this.camera.shader.VERTICES);
         gl.enableVertexAttribArray(this.camera.shader.TEXCOORDS);
 
-        //this.camera.SetToCameraSpace(this.modelview_matrix);
+        this.camera.SetToCameraSpace(this.modelview_matrix);
 
         for(var i=0;i<this.draw_objects.length;i++){
             if(this.draw_objects[i] != null){
-                this.draw_objects[i].Draw(this.camera.shader,this.modelview_matrix,this.projection_matrix);
+                this.draw_objects[i].Draw(this.camera,this.modelview_matrix,this.projection_matrix);
             }
         }
     }

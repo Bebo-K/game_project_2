@@ -1,27 +1,27 @@
 
-function Primitive_Draw(shader,modelview_matrix,projection_matrix){
+function Primitive_Draw(camera,modelview_matrix,projection_matrix){
         var local_space = modelview_matrix.Copy();
-        //local_space.TransformToSpace(this);
+        local_space.TransformToSpace(this);
 
-        gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,local_space.Get(false));
-        gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(false));
+        gl.uniformMatrix4fv(camera.shader.MODELVIEW_MATRIX,false,local_space.Get(true));
+        gl.uniformMatrix4fv(camera.shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D,this.texture.gl_id);
-        gl.uniform1i(shader.TEXTURE0,0);
+        gl.uniform1i(camera.shader.TEXTURE0,0);
 
         var tex_location = new Float32Array([
             this.texture.texture_x,
             this.texture.texture_y,
             this.texture.texture_w,
             this.texture.texture_h]);
-        gl.uniform4fv(shader.TEXTURE_LOCATION,tex_location);
+        gl.uniform4fv(camera.shader.TEXTURE_LOCATION,tex_location);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
-        gl.vertexAttribPointer(shader.VERTICES,3,gl.FLOAT,false,0,0);
+        gl.vertexAttribPointer(camera.shader.VERTICES,3,gl.FLOAT,false,0,0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
-        gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
+        gl.vertexAttribPointer(camera.shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
 
         gl.drawArrays(gl.TRIANGLES,0,this.vertex_count);
     }
@@ -65,18 +65,18 @@ class CylinderPrimitive{
             
             //side quad
             verts.push(radius*cos1,0,radius*sin1);
-            tex_coords.push(fraction1,0.25);
-            verts.push(radius*cos1,height,radius*sin1);
             tex_coords.push(fraction1,1.0);
+            verts.push(radius*cos1,height,radius*sin1);
+            tex_coords.push(fraction1,0.5);
             verts.push(radius*cos2,height,radius*sin2);
-            tex_coords.push(fraction2,1.0);
+            tex_coords.push(fraction2,0.5);
 
             verts.push(radius*cos2,height,radius*sin2);
-            tex_coords.push(fraction2,1.0);
+            tex_coords.push(fraction2,0.5);
             verts.push(radius*cos2,0,radius*sin2);
-            tex_coords.push(fraction2,0.25);
+            tex_coords.push(fraction2,1.00);
             verts.push(radius*cos1,0,radius*sin1);
-            tex_coords.push(fraction1,0.25);
+            tex_coords.push(fraction1,1.00);
 
             //cap top
             verts.push(radius*cos1,height,radius*sin1);
@@ -93,8 +93,6 @@ class CylinderPrimitive{
             tex_coords.push(0.75 + 0.25*cos2,0.25 + 0.25*sin2);
             verts.push(0,0,0);
             tex_coords.push(0.75,0.25);
-
-            indices.push(0,1,2,  0,2,3)
         }
     
         this.vertex_count = verts.length/3;
@@ -143,10 +141,10 @@ class CubePrimitive{
         
         var tex_coords = [
             0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Front
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Back
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Top
+            1.0,1.0, 1.0,0.0, 0.0,0.0,  1.0,1.0, 0.0,0.0, 0.0,1.0, //Back
+            0.0,0.0, 0.0,1.0, 1.0,1.0,  0.0,0.0, 1.0,1.0, 1.0,0.0, //Top
             0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Bottom
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Right
+            1.0,1.0, 1.0,0.0, 0.0,0.0,  1.0,1.0, 0.0,0.0, 0.0,1.0, //Right
             0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0 //Left
         ];
 

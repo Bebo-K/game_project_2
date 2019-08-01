@@ -9,17 +9,24 @@ class Game{
         
         var cylinder_tex = this.textures.AddTextureHandle("barrel",atlas_id,0,0,64,64);
 
-        this.scene_renderer.camera.z = 1.0;
+        this.scene_renderer.camera.z = 10;
 
-        this.cylinder = new CubePrimitive(1,1,1,cylinder_tex);
+        this.cylinder = new CylinderPrimitive(3,1,cylinder_tex);
+        this.cube = new CubePrimitive(1,1,1,cylinder_tex);
+
+        this.cylinder.z = 0;
+        this.cylinder.y = -1.5;
+        this.cube.y = 2;
 
         this.scene_renderer.Add(this.cylinder);
+        this.scene_renderer.Add(this.cube);
             
         this.input = new Input();
     }
 
     Update (delta) {
-        this.scene_renderer.camera.rotation.y += (0.01*delta);
+        //this.scene_renderer.camera.rotation.z += (0.01*delta);
+        this.cylinder.rotation.y += (0.01*delta);
     }
 
     Paint(){
