@@ -25,6 +25,7 @@ function Primitive_Draw(camera,modelview_matrix,projection_matrix){
 
         gl.drawArrays(gl.TRIANGLES,0,this.vertex_count);
     }
+    
 function Primitive_Unload(){
     gl.deleteBuffer(this.vertex_buffer);
     gl.deleteBuffer(this.texcoord_buffer);
@@ -120,7 +121,6 @@ class CubePrimitive{
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();
         this.texcoord_buffer = gl.createBuffer();
-        this.index_buffer = gl.createBuffer ();
 
         this.height = height;
         this.width = width;

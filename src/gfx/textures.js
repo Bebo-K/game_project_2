@@ -68,3 +68,6 @@ class TextureManager{
     }
 
 }
+
+var texture_manager = new TextureManager();
+var ATLAS_0 = texture_manager.AddAtlas("/img/atlas_1.png");
