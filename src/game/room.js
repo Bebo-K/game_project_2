@@ -1,5 +1,4 @@
 
-
 class Room{
 
     constructor(width,height){
@@ -15,9 +14,9 @@ class Room{
         for(var i=0;i<this.height;i++){
             for(var j=0;j<this.width;j++){
 
-                Tile_Draw(tile_types[this.tiles[i*this.height + j]],
-                    j*GLOBAL_TILE_SIZE,i*GLOBAL_TILE_SIZE,
-                    0,camera,modelview_matrix,projection_matrix);
+                Tile_Draw(this.tile_types[this.tiles[i*this.height + j]],
+                    j*GLOBAL_TILE_SIZE,0,i*GLOBAL_TILE_SIZE,
+                    camera,modelview_matrix,projection_matrix);
             }
         }
     }

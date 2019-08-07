@@ -33,7 +33,7 @@ function Primitive_Unload(){
 
 class CylinderPrimitive{
 
-    constructor(height,radius,texture_handle){
+    constructor(height,diameter,texture_handle){
         this.x = 0;
         this.y = 0;
         this.z = 0;
@@ -44,14 +44,19 @@ class CylinderPrimitive{
         this.vertex_buffer = gl.createBuffer();
         this.texcoord_buffer = gl.createBuffer();
 
-        this.radius = radius*1.0;
-        this.height = height*1.0;
+        var radius = diameter*0.5;
+        this.radius = radius;
+        this.height = height;
 
         const rings = 12;
+        const lo = 0.01;
+        const hi = 0.98;
         var verts = [];
         var tex_coords = [];
         var theta1, theta2;
         var fraction1,fraction2;
+        var cos1,sin1,cos2,sin2;
+        var tc1,tc2;
 
         for(var i=0;i< rings;i++){ 
             fraction1 = i/rings; 
@@ -59,25 +64,28 @@ class CylinderPrimitive{
             theta1 = Math.PI *2 * fraction1;//;   
             theta2 = Math.PI *2 * fraction2;//;  
             
-            var cos1 = Math.cos(theta1);
-            var sin1 = Math.sin(theta1);
-            var cos2 = Math.cos(theta2);
-            var sin2 = Math.sin(theta2);
+            cos1 = Math.cos(theta1);
+            sin1 = Math.sin(theta1);
+            cos2 = Math.cos(theta2);
+            sin2 = Math.sin(theta2);
+
+            tc1 = (fraction1+ lo) * hi ;
+            tc2 = (fraction2+ lo) * hi;
             
             //side quad
             verts.push(radius*cos1,0,radius*sin1);
-            tex_coords.push(fraction1,1.0);
+            tex_coords.push(tc1,hi);
             verts.push(radius*cos1,height,radius*sin1);
-            tex_coords.push(fraction1,0.5);
+            tex_coords.push(tc1,0.5+ lo);
             verts.push(radius*cos2,height,radius*sin2);
-            tex_coords.push(fraction2,0.5);
+            tex_coords.push(tc2,0.5+ lo);
 
             verts.push(radius*cos2,height,radius*sin2);
-            tex_coords.push(fraction2,0.5);
+            tex_coords.push(tc2,0.5+ lo);
             verts.push(radius*cos2,0,radius*sin2);
-            tex_coords.push(fraction2,1.00);
+            tex_coords.push(tc2,hi);
             verts.push(radius*cos1,0,radius*sin1);
-            tex_coords.push(fraction1,1.00);
+            tex_coords.push(tc1,hi);
 
             //cap top
             verts.push(radius*cos1,height,radius*sin1);
@@ -89,9 +97,9 @@ class CylinderPrimitive{
 
             //cap bottom
             verts.push(radius*cos1,0,radius*sin1);
-            tex_coords.push(0.75 + 0.25*cos1,0.25 + 0.25*sin1);
+            tex_coords.push(0.75 + 0.2*cos1,0.2 + 0.2*sin1);
             verts.push(radius*cos2,0,radius*sin2);
-            tex_coords.push(0.75 + 0.25*cos2,0.25 + 0.25*sin2);
+            tex_coords.push(0.75 + 0.2*cos2,0.2 + 0.2*sin2);
             verts.push(0,0,0);
             tex_coords.push(0.75,0.25);
         }
@@ -139,13 +147,15 @@ class CubePrimitive{
             -x, -y, -z,  -x, -y,  z,  -x,  y,  z,    -x, -y, -z,  -x,  y,  z,  -x,  y, -z// Left face
           ]
         
+        const lo = 0.000001;
+        const hi = 0.99999;
         var tex_coords = [
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Front
-            1.0,1.0, 1.0,0.0, 0.0,0.0,  1.0,1.0, 0.0,0.0, 0.0,1.0, //Back
-            0.0,0.0, 0.0,1.0, 1.0,1.0,  0.0,0.0, 1.0,1.0, 1.0,0.0, //Top
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0, //Bottom
-            1.0,1.0, 1.0,0.0, 0.0,0.0,  1.0,1.0, 0.0,0.0, 0.0,1.0, //Right
-            0.0,1.0, 1.0,1.0, 1.0,0.0,  0.0,1.0, 1.0,0.0, 0.0,0.0 //Left
+            lo,hi, hi,hi, hi,lo,  lo,hi, hi,lo, lo,lo, //Front
+            hi,hi, hi,lo, lo,lo,  hi,hi, lo,lo, lo,hi, //Back
+            lo,lo, lo,hi, hi,hi,  lo,lo, hi,hi, hi,lo, //Top
+            lo,hi, hi,hi, hi,lo,  lo,hi, hi,lo, lo,lo, //Bottom
+            hi,hi, hi,lo, lo,lo,  hi,hi, lo,lo, lo,hi, //Right
+            lo,hi, hi,hi, hi,lo,  lo,hi, hi,lo, lo,lo //Left
         ];
 
         this.vertex_count = verts.length/3;
@@ -161,32 +171,3 @@ class CubePrimitive{
 }
 CubePrimitive.prototype.Draw = Primitive_Draw;
 CubePrimitive.prototype.Unload = Primitive_Unload;
-
-class TestPrimitive{
-    constructor(texture_handle){
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
-        this.rotation = new Vec3(0,0,0);
-        this.scale = new Vec3(1,1,1);
-        
-        this.texture = texture_handle;
-        this.vertex_buffer = gl.createBuffer();
-        this.texcoord_buffer = gl.createBuffer();
-
-        var verts =[1.0,0.0,0.0,  0.0,0.0,0.0,   0.0,1.0,0.0];
-        var tex_coords = [0.0, 0.0,   1.0, -1.0,   1.0,  1.0];
-
-        this.vertex_count = verts.length/3;
-        var vertices = Float32Array.from(verts);
-        var texture_coords = Float32Array.from(tex_coords);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER,vertices,gl.STATIC_DRAW);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER,texture_coords,gl.STATIC_DRAW);
-    }
-};
-TestPrimitive.prototype.Draw = Primitive_Draw;
-TestPrimitive.prototype.Unload = Primitive_Unload;
