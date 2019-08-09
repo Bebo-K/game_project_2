@@ -20,12 +20,14 @@ class Camera{
         if(this.rotation.y != 0){mat.Rotate_Y(this.rotation.y);}
         if(this.rotation.z != 0){mat.Rotate_Z(this.rotation.z);}
     }
+    ToWorldSpace(vector){
+        return vector.Rotate_X(this.rotation.x);
+    }
 }
 
 class Renderer{
 
     constructor(){
-        this.camera = new Camera();
         this.draw_objects = [];
         this.modelview_matrix = new Matrix();
         this.projection_matrix = new Matrix();
@@ -60,25 +62,25 @@ class Renderer{
         }
     }
 
-    Paint(){
-        this.camera.shader.Use();
+    Paint(camera){
+        camera.shader.Use();
         this.modelview_matrix.SetIdentity();
-        if(this.camera.ortho == true){
-            var aspect_ratio = this.camera.width/this.camera.height;
-            this.projection_matrix.SetOrtho(aspect_ratio*10,10,this.camera.near,this.camera.far);
+        if(camera.ortho == true){
+            var aspect_ratio = camera.width/camera.height;
+            this.projection_matrix.SetOrtho(aspect_ratio*10,10,camera.near,camera.far);
         }
         else{
-            this.projection_matrix.SetPerspective(this.camera.width,this.camera.height,this.camera.near,this.camera.far,this.camera.fov);
+            this.projection_matrix.SetPerspective(camera.width,camera.height,camera.near,camera.far,camera.fov);
         }
         
-        gl.enableVertexAttribArray(this.camera.shader.VERTICES);
-        gl.enableVertexAttribArray(this.camera.shader.TEXCOORDS);
+        gl.enableVertexAttribArray(camera.shader.VERTICES);
+        gl.enableVertexAttribArray(camera.shader.TEXCOORDS);
 
-        this.camera.SetToCameraSpace(this.modelview_matrix);
+        camera.SetToCameraSpace(this.modelview_matrix);
 
         for(var i=0;i<this.draw_objects.length;i++){
             if(this.draw_objects[i] != null){
-                this.draw_objects[i].Draw(this.camera,this.modelview_matrix,this.projection_matrix);
+                this.draw_objects[i].Draw(camera,this.modelview_matrix,this.projection_matrix);
             }
         }
     }

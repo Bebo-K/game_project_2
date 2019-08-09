@@ -1,5 +1,6 @@
 
-var game_instance;
+var game;
+var input;
 var game_update_interval = 1000.0/60.0;
 var last_timestamp = 0;
 
@@ -9,10 +10,10 @@ function game_loop(timestamp){
     var delta = timestamp - last_timestamp;
     if(delta > game_update_interval){
        if(delta > 1000){delta = 1000;}
-       game_instance.Update(delta); 
+       game.Update(delta); 
        last_timestamp = timestamp;
     }
-    game_instance.Paint();
+    game.Paint();
 }
 
 function main() {
@@ -20,7 +21,8 @@ function main() {
         alert("Unable to initialize WebGL. Your browser or machine may not support it.");
         return;
     }
-    game_instance = new Game();
+    game = new Game();
+    input = new Input();
     document.addEventListener('keydown', input_keydown, false);
     document.addEventListener('keyup', input_keyup, false);
     window.requestAnimationFrame(game_loop);
@@ -28,10 +30,10 @@ function main() {
 }
 
 function input_keydown(event){
-    game_instance.InputEvent(event.keyCode,true);
+    input.OnKeyEvent(event.keyCode,true);
 }
 function input_keyup(){
-    game_instance.InputEvent(event.keyCode,false);
+    input.OnKeyEvent(event.keyCode,false);
 }
 
 

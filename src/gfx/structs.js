@@ -4,6 +4,25 @@ class Vec3{
         this.y=y;
         this.z=z;
     }
+
+    Rotate_X(theta){
+        var rx = -theta*Math.PI/180;
+        var cos = Math.cos(rx);
+        var sin = Math.sin(rx);
+        return new Vec3(this.x,this.y*cos - this.z*sin, this.y*sin + this.z*cos);
+    }
+    Rotate_Y(theta){
+        var ry = -theta*Math.PI/180;
+        var cos = Math.cos(ry);
+        var sin = Math.sin(ry);
+        return new Vec3(this.x*cos + this.z*sin,this.y, -this.x*sin + this.z*cos);
+    }
+    Rotate_Z(theta){
+        var rz = -theta*Math.PI/180;
+        var cos = Math.cos(rz);
+        var sin = Math.sin(rz);
+        return new Vec3(this.x*cos - this.y*sin, this.x*sin + this.y*cos, this.z);
+    }
 }
 
 class Matrix{

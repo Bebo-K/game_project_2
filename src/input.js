@@ -26,6 +26,8 @@ class Input{
             case 87: this.up=fire;break;
             case 83: this.down=fire;break;
             case 32: this.jump=fire;break;
+            case 81: this.cam_cw=fire;break;
+            case 69: this.cam_ccw=fire;break;
             case 74: this.debug1=fire;break;
             case 75: this.debug2=fire;break;
             default:break;
