@@ -8,6 +8,7 @@ class Sprite{
         this.z = 0;
         this.rotation = new Vec3(0,0,0);
         this.scale = new Vec3(1,1,1);
+        this.hide=false;
 
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();

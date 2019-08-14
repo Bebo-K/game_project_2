@@ -2,7 +2,11 @@
 
 class PhysicsComponent{
 
-    constructor(){}
+    constructor(){
+        this.enable_gravity = true;
+        this.is_midair = false;
+
+    }
 
 
 
@@ -13,21 +17,45 @@ class PhysicsSystem{
     constructor(){
         this.gravity =  -15.0;
         this.terminal_velocity = -64;
-
+        this.midair_velocity_damper = 0.75;
+        this.ground_velocity_damper = 0.9999;
     }
-
-    ValidEntity(entity){
-        return (entity.phys != null);
-    }
-
+    
+    ApplyMidairVelocityDampening(entity,seconds){
+		var damper_amount = Math.pow(1-this.midair_velocity_damper,seconds);
+		entity.velocity.x *= damper_amount;
+		entity.velocity.z *= damper_amount;
+	}
+	
+	ApplySlidingVelocityDampening(entity,seconds){
+		var damper_amount = Math.pow(1-this.ground_velocity_damper,seconds);
+		entity.velocity.x *= damper_amount;
+		entity.velocity.z *= damper_amount;
+	}
 
     Update(entity,delta){
-        if(!ValidEntity(entity))return;
+        var seconds = delta/1000.0
 
-        if(HandleNoPlayerControlCase(entity)){return;}
+        if(entity.phys != null){
+            if(entity.enable_gravity && entity.velocity.y > this.terminal_velocity){
+                entity.velocity.y += this.gravity*seconds;
+            }
+            
+        }
+        
+        //also handle generic movement
+        entity.x += seconds*entity.velocity.x;
+        entity.y += seconds*entity.velocity.y;
+        entity.z += seconds*entity.velocity.z;
 
-		var input_axis = new Vec3(input.horizontal,input.vertical,0);
-        e.movement.goal =  game.scene.camera.ToWorldSpace(input_axis);
+        if(entity.phys != null){
+            if(entity.phys.is_midair){
+                this.ApplyMidairVelocityDampening(entity,seconds);
+            }
+            else {
+                this.ApplySlidingVelocityDampening(entity,seconds);
+            }
+        }
     }
 
 }

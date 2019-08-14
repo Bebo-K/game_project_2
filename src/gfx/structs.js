@@ -12,10 +12,10 @@ class Vec3{
         return new Vec3(this.x,this.y*cos - this.z*sin, this.y*sin + this.z*cos);
     }
     Rotate_Y(theta){
-        var ry = -theta*Math.PI/180;
+        var ry = theta*Math.PI/180;
         var cos = Math.cos(ry);
         var sin = Math.sin(ry);
-        return new Vec3(this.x*cos + this.z*sin,this.y, -this.x*sin + this.z*cos);
+        return new Vec3(this.x*cos + this.z*sin,this.y,this.z*cos - this.x*sin);
     }
     Rotate_Z(theta){
         var rz = -theta*Math.PI/180;

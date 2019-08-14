@@ -18,20 +18,21 @@ class PlayerControlSystem{
 
 
     HandleNoPlayerControlCase(entity){
-        if(!entity.movement_enabled) {
+        if(!entity.player.movement_enabled) {
 			entity.movement.jump_goal=false;
-			entity.movement.move_goal.Scale(0.1);
+            entity.movement.goal.x *= 0.1;
+            entity.movement.goal.z *= 0.1;
 			return true;
         }
         return false;
     }
 
     Update(entity,delta){
-        if(!ValidEntity(entity))return;
+        if(!this.ValidEntity(entity))return;
 
-        if(HandleNoPlayerControlCase(entity)){return;}
+        if(this.HandleNoPlayerControlCase(entity)){return;}
 
-		var input_axis = new Vec3(input.horizontal,input.vertical,0);
+		var input_axis = new Vec3(input.horizontal,0,-input.vertical);
         entity.movement.goal =  game.scene.camera.ToWorldSpace(input_axis);
     }
 }

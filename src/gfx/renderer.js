@@ -15,13 +15,13 @@ class Camera{
         gl.viewport(0,0,this.width,this.height);
     }
     SetToCameraSpace(mat){
-        mat.Translate(-this.x,-this.y,-this.z);
         if(this.rotation.x != 0){mat.Rotate_X(this.rotation.x);}
         if(this.rotation.y != 0){mat.Rotate_Y(this.rotation.y);}
         if(this.rotation.z != 0){mat.Rotate_Z(this.rotation.z);}
+        mat.Translate(-this.x,-this.y,-this.z);
     }
     ToWorldSpace(vector){
-        return vector.Rotate_X(this.rotation.x);
+        return vector.Rotate_Y(this.rotation.y);
     }
 }
 

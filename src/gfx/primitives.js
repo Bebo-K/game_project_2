@@ -33,12 +33,19 @@ function Primitive_Unload(){
 
 class CylinderPrimitive{
 
-    constructor(height,diameter,texture_handle){
+    constructor(height,diameter,texture_handle,position){
+        
         this.x = 0;
         this.y = 0;
         this.z = 0;
+        if(position != null){
+            this.x = position.x;
+            this.y = position.y;
+            this.z = position.z;
+        }
         this.rotation = new Vec3(0,0,0);
         this.scale = new Vec3(1,1,1);
+        this.hide=false;
         
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();
@@ -119,12 +126,19 @@ CylinderPrimitive.prototype.Draw = Primitive_Draw;
 CylinderPrimitive.prototype.Unload = Primitive_Unload;
 
 class CubePrimitive{
-    constructor(height,width,depth,texture_handle){
+    constructor(height,width,depth,texture_handle,position){
+        
         this.x = 0;
         this.y = 0;
         this.z = 0;
+        if(position != null){
+            this.x = position.x;
+            this.y = position.y;
+            this.z = position.z;
+        }
         this.rotation = new Vec3(0,0,0);
         this.scale = new Vec3(1,1,1);
+        this.hide=false;
         
         this.texture = texture_handle;
         this.vertex_buffer = gl.createBuffer();
