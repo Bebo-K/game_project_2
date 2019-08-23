@@ -13,9 +13,36 @@ class Room{
 
     Draw(camera,modelview_matrix,projection_matrix) {
         var type;
+
+        var xmin = Math.floor(camera.x/GLOBAL_TILE_SIZE);
+        var xmax = Math.ceil(camera.x/GLOBAL_TILE_SIZE);
+        var zmin = Math.floor(camera.z/GLOBAL_TILE_SIZE);
+        var zmax = Math.ceil(camera.z/GLOBAL_TILE_SIZE);
+        const VIEW_DISTANCE = 20;
+
+        var cam_turn = camera.rotation.y;
+        while(cam_turn < 0){cam_turn += 360;}
+        while(cam_turn > 360){cam_turn -= 360;}
+
+        var fov_max = cam_turn +(camera.fov/2);
+        if(fov_max > 360)(fov_max -= 360)
+        
+        var fov_min = cam_turn -(camera.fov/2);
+        if(fov_min < 0)(fov_min += 360)
+
+
+        //simple cull
+        if(fov_max >= 270 || fov_min <= 90){zmin -= VIEW_DISTANCE;}
+        if(fov_min <= 270 && fov_max >= 90){zmax += VIEW_DISTANCE;}
+        if(fov_min >= 180 && cam_turn +(camera.fov/2) >= 0){xmax += VIEW_DISTANCE;}
+        if(fov_max <= 180 || cam_turn -(camera.fov/2) <= 0){xmin -= VIEW_DISTANCE;}
+
+        if(xmin < 0){xmin=0;}   if(xmax >= this.width){xmax = this.width-1;}
+        if(zmin < 0){zmin=0;}   if(zmax >= this.height){zmax = this.height-1;}
+
         for(var h=0;h<this.depth;h++){
-            for(var i=0;i<this.height;i++){
-                for(var j=0;j<this.width;j++){
+            for(var i=zmin;i<zmax;i++){
+                for(var j=xmin;j<xmax;j++){
                     type = this.tile_types[this.tiles[h*this.height*this.width +i*this.height + j]]
                     if(type == null)continue;
                     Tile_Draw(type,j*GLOBAL_TILE_SIZE,h*GLOBAL_TILE_SIZE,i*GLOBAL_TILE_SIZE,

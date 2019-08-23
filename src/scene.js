@@ -32,7 +32,7 @@ class Scene{
             box_entity.draw.Add(new CylinderPrimitive(0.2,1.5,cylinder_tex,new Vec3(0,1.5,0)),this.renderer);
 
             box_entity.player = new PlayerControlComponent();
-            box_entity.movement = new MovementComponent(8,0.01);
+            box_entity.movement = new MovementComponent(10,0.1);
             box_entity.camera_target = new CameraTargetComponent();
             box_entity.phys = new PhysicsComponent();
 
