@@ -3,15 +3,25 @@ var ATLAS_WIDTH = 1024;
 var ATLAS_HEIGHT = 1024;
 
 class TextureHandle{
-    constructor(handle_name,gl_id,x,y,width,height){
+    constructor(handle_name,gl_id,x,y,width,height,frames,strips){
+
         this.name = handle_name;
         this.gl_id = gl_id;
         this.x = x;this.y = y;
-        this.width = width; this.height = height;
         this.texture_x = this.x/ATLAS_WIDTH;
         this.texture_y = this.y/ATLAS_HEIGHT;
-        this.texture_w = this.width/ATLAS_WIDTH;
-        this.texture_h = this.height/ATLAS_HEIGHT;
+        if(frames == null || strips == null){
+            this.width = width;
+            this.height = height;
+            this.texture_w = this.width/ATLAS_WIDTH;
+            this.texture_h = this.height/ATLAS_HEIGHT;
+        }
+        else{
+            this.width = width/frames;
+            this.height = height/strips;
+            this.texture_w = this.width/(frames*ATLAS_WIDTH);
+            this.texture_h = this.height/(strips*ATLAS_HEIGHT);
+        }
     }
 }
 
@@ -58,10 +68,10 @@ class TextureManager{
         return handle;
     }
 
-    AddTextureHandle(handle_name,atlas_id,x,y,width,height){
+    AddTextureHandle(handle_name,atlas_id,x,y,width,height,frames,strips){
         var tex_handle = this.GetTextureHandle(handle_name);
         if(tex_handle === null){
-            tex_handle = new TextureHandle(handle_name,atlas_id,x,y,width,height)
+            tex_handle = new TextureHandle(handle_name,atlas_id,x,y,width,height,frames,strips)
             this.texture_handles.push(tex_handle);
         }
         return tex_handle;

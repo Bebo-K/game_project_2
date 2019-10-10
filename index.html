@@ -11,6 +11,7 @@
   //global constants
      var canvas = document.getElementById("canvas");
      var gl = canvas.getContext("webgl", { alpha: false });
+     gl.viewport(0,0,800,640);
   </script>
   <script src="src/gfx/structs.js"></script>
   <script src="src/gfx/shader.js"></script>
@@ -27,6 +28,8 @@
   <script src="src/game/tile.js"></script>
   <script src="src/game/room.js"></script>
   <script src="src/game/floor.js"></script>
+  <script src="src/ui/ui_layer.js"></script>
+  <script src="src/ui/ui.js"></script>
   <script src="src/input.js"></script>
   <script src="src/scene.js"></script>
   <script src="src/game.js"></script>

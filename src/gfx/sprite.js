@@ -1,11 +1,17 @@
 
 class Sprite{
 
-    constructor(texture_handle,frames,strips,offset){
+    constructor(texture_handle,frame,strip,offset){
 
         this.x = 0;
         this.y = 0;
         this.z = 0;
+        this.frame=0;
+        this.strip=0;
+        if(frame != null && strip  != null){
+            this.frame=frame;
+            this.strip=strip;
+        }
         this.rotation = new Vec3(0,0,0);
         this.scale = new Vec3(1,1,1);
         this.hide=false;
@@ -14,24 +20,20 @@ class Sprite{
         this.vertex_buffer = gl.createBuffer();
         this.texcoord_buffer = gl.createBuffer();
 
-        var sprite_width = texture_handle.width/frames;
-        var sprite_height = texture_handle.height/strips;
+        var sprite_width = texture_handle.width/this.frames;
+        var sprite_height = texture_handle.height/this.strips;
 
         var offset_x = 0;
         var offset_y = 0;
         var offset_z = 0;
-        if(offset){
+        if(offset != null){
             offset_x = offset.x;
             offset_y = offset.y;
             offset_z = offset.z;
         }
 
-        this.frame=0;
-        this.strip=0;
-        this.max_frames=frames;
-        this.max_strips=strips;
-        this.sprite_width = this.texture.texture_w/this.max_frames;
-        this.sprite_height = this.texture.texture_h/this.max_strips;
+        var sprite_width = this.texture.width;
+        var sprite_height = this.texture.height;
 
         var verts = new Float32Array([
 			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z,
@@ -57,32 +59,29 @@ class Sprite{
         gl.bufferData(gl.ARRAY_BUFFER,texcoords,gl.STATIC_DRAW);
     }
 
-    Draw(shader,modelview_matrix,projection_matrix){
+    Draw(camera,modelview_matrix,projection_matrix){
         var local_space = modelview_matrix.Copy();
         local_space.TransformToSpace(this);
 
-        gl.uniformMatrix4fv(shader.MODELVIEW_MATRIX,false,local_space.Get(true));
-        gl.uniformMatrix4fv(shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
+        gl.uniformMatrix4fv(camera.shader.MODELVIEW_MATRIX,false,local_space.Get(true));
+        gl.uniformMatrix4fv(camera.shader.PROJECTION_MATRIX,false,projection_matrix.Get(true));
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D,this.texture.gl_id);
-        gl.uniform1i(shader.TEXTURE_0,0);
+        gl.uniform1i(camera.shader.TEXTURE_0,0);
 
         var tex_location = new Float32Array([
-            this.texture.texture_x+(this.sprite_width*this.frame),
-            this.texture.texture_y+(this.sprite_height*this.strip),
-            this.sprite_width,
-            this.sprite_height]);
-        gl.uniform4fv(shader.TEXTURE_LOCATION,tex_location);
-
-        var color = [1,1,1,1];
-        gl.uniform4fv(shader.COLOR,color);
+            this.texture.texture_x+(this.texture.texture_w*this.frame),
+            this.texture.texture_y+(this.texture.texture_h*this.strip),
+            this.texture.texture_w,
+            this.texture.texture_h]);
+        gl.uniform4fv(camera.shader.TEXTURE_LOCATION,tex_location);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
-        gl.vertexAttribPointer(shader.VERTICES,3,gl.FLOAT,false,0,0);
+        gl.vertexAttribPointer(camera.shader.VERTICES,3,gl.FLOAT,false,0,0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.texcoord_buffer);
-        gl.vertexAttribPointer(shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
+        gl.vertexAttribPointer(camera.shader.TEXCOORDS,2,gl.FLOAT,false,0,0);
 
         gl.drawArrays(gl.TRIANGLES,0,6);
     }

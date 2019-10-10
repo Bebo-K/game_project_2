@@ -12,7 +12,6 @@ class Camera{
         this.z = 0;
         this.rotation = new Vec3(0,0,0);
         this.shader = new Shader();
-        gl.viewport(0,0,this.width,this.height);
     }
     SetToCameraSpace(mat){
         if(this.rotation.x != 0){mat.Rotate_X(this.rotation.x);}
@@ -66,8 +65,7 @@ class Renderer{
         camera.shader.Use();
         this.modelview_matrix.SetIdentity();
         if(camera.ortho == true){
-            var aspect_ratio = camera.width/camera.height;
-            this.projection_matrix.SetOrtho(aspect_ratio*10,10,camera.near,camera.far);
+            this.projection_matrix.SetOrtho(camera.width,camera.height,camera.near,camera.far);
         }
         else{
             this.projection_matrix.SetPerspective(camera.width,camera.height,camera.near,camera.far,camera.fov);
