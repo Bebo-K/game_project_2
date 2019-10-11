@@ -19,8 +19,8 @@ class TextureHandle{
         else{
             this.width = width/frames;
             this.height = height/strips;
-            this.texture_w = this.width/(frames*ATLAS_WIDTH);
-            this.texture_h = this.height/(strips*ATLAS_HEIGHT);
+            this.texture_w = width/(frames*ATLAS_WIDTH);
+            this.texture_h = height/(strips*ATLAS_HEIGHT);
         }
     }
 }

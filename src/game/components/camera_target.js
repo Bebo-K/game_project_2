@@ -5,7 +5,7 @@ class CameraTargetComponent{
         this.turn=0;
 		this.zoom=1;
 		this.pitch=0;
-		this.offset=new Vec3(0,2.5,8);
+		this.offset=new Vec3(0,12,12);
         this.zoom_min=1;
         this.zoom_max=10;
         this.zoom_min_tilt=10;

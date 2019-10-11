@@ -14,12 +14,13 @@ class Room{
     Draw(camera,modelview_matrix,projection_matrix) {
         var type;
 
+        const VIEW_DISTANCE = 28;
+        const NEG_VIEW_DISTANCE = 3;
         
-        var xmin = Math.floor(camera.x/GLOBAL_TILE_SIZE);
-        var xmax = Math.ceil(camera.x/GLOBAL_TILE_SIZE);
-        var zmin = Math.floor(camera.z/GLOBAL_TILE_SIZE);
-        var zmax = Math.ceil(camera.z/GLOBAL_TILE_SIZE);
-        const VIEW_DISTANCE = 20;
+        var xmin = Math.floor(camera.x/GLOBAL_TILE_SIZE)-NEG_VIEW_DISTANCE;
+        var xmax = Math.ceil(camera.x/GLOBAL_TILE_SIZE)+NEG_VIEW_DISTANCE;
+        var zmin = Math.floor(camera.z/GLOBAL_TILE_SIZE)-NEG_VIEW_DISTANCE;
+        var zmax = Math.ceil(camera.z/GLOBAL_TILE_SIZE)+NEG_VIEW_DISTANCE;
 
         
 

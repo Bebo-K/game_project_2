@@ -3,23 +3,30 @@ const overlay_template = {
     "width":384,
     "height":256,
     "sprites":[
-    {"handle_name":"name_plaque","atlas_id":1,"x":0,"y":0,"width":18,"height":22,"frames":1,"strips":1},
-    {"handle_name":"player_point_board","atlas_id":1,"x":0,"y":0,"width":2,"height":22,"frames":2,"strips":1},
-    {"handle_name":"party_point_board","atlas_id":1,"x":0,"y":0,"width":44,"height":20,"frames":1,"strips":1},
+    {"handle_name":"name_plaque","atlas_id":1,"x":0,"y":192,"width":18,"height":22,"frames":1,"strips":1},
+    {"handle_name":"player_point_board","atlas_id":1,"x":59,"y":192,"width":2,"height":22,"frames":2,"strips":1},
+    {"handle_name":"party_point_board","atlas_id":1,"x":0,"y":214,"width":44,"height":20,"frames":1,"strips":1},
     
-    {"handle_name":"hp_number_plate","atlas_id":1,"x":0,"y":0,"width":36,"height":8,"frames":1,"strips":1},
-    {"handle_name":"mp_number_plate","atlas_id":1,"x":0,"y":0,"width":41,"height":11,"frames":1,"strips":1}
+    {"handle_name":"hp_number_plate","atlas_id":1,"x":18,"y":192,"width":36,"height":8,"frames":1,"strips":1},
+    {"handle_name":"mp_number_plate","atlas_id":1,"x":18,"y":200,"width":41,"height":11,"frames":1,"strips":1},
+    {"handle_name":"use_item_slot","atlas_id":1,"x":0,"y":234,"width":96,"height":40,"frames":2,"strips":1}
+    
     
     ],
     "elements":[
         {"name":"player_plaque","sprite_instance":{"texture":"name_plaque","frame":0,"strip":0},"x":2,"y":3,"enabled":true},
-        {"name":"player_point_board_start","sprite_instance":{"texture":"player_point_board","frame":0,"strip":0},"x":22,"y":4,"enabled":true},
-        {"name":"player_point_board_center","sprite_instance":{"texture":"player_point_board","frame":0,"strip":1},"x":23,"y":4,"enabled":true},
-        {"name":"player_point_board_end","sprite_instance":{"texture":"player_point_board","frame":0,"strip":1},"x":24,"y":4,"enabled":true},
         {"name":"player_hp_plate","sprite_instance":{"texture":"hp_number_plate","frame":0,"strip":0},"x":22,"y":25,"enabled":true},
         {"name":"player_mp_plate","sprite_instance":{"texture":"mp_number_plate","frame":0,"strip":0},"x":21,"y":41,"enabled":true},
         
+        {"name":"player_point_board_start","sprite_instance":{"texture":"player_point_board","frame":0,"strip":0},"x":22,"y":4,"enabled":true},
+        {"name":"player_point_board_center","sprite_instance":{"texture":"player_point_board","frame":1,"strip":0},"x":23,"y":4,"enabled":true},
+        {"name":"player_point_board_end","sprite_instance":{"texture":"player_point_board","frame":0,"strip":0},"x":24,"y":4,"enabled":true},
+
         
+        {"name":"left_use_item","sprite_instance":{"texture":"use_item_slot","frame":0,"strip":0},"x":180,"y":4,"enabled":true},
+        {"name":"right_use_item","sprite_instance":{"texture":"use_item_slot","frame":1,"strip":0},"x":242,"y":4,"enabled":true},
+        
+
         {"name":"party_member_1_plaque","sprite_instance":{"texture":"name_plaque","frame":0,"strip":0},"x":2,"y":70,"enabled":false},
         {"name":"party_member_1_board","sprite_instance":{"texture":"party_point_board","frame":0,"strip":0},"x":22,"y":71,"enabled":false},
         {"name":"party_member_2_plaque","sprite_instance":{"texture":"name_plaque","frame":0,"strip":0},"x":2,"y":100,"enabled":false},
@@ -100,19 +107,6 @@ class UILayer{
     constructor(ui_object){
         
         this.renderer = new Renderer();
-        
-        this.camera = new Camera();
-        this.camera.ortho = true;
-        this.camera.width = ui_object.width;
-        this.camera.height = ui_object.height;
-        this.camera.near = 0.1;
-        this.camera.far = 100.0;
-        this.camera.x = ui_object.width/2;
-        this.camera.y = ui_object.height/2;
-        this.camera.z = 1;
-        this.camera.rotation = new Vec3(0,0,0);
-        this.camera.shader = new Shader();
-
         this.sprites = [];
         this.slots = [];
         this.areas = [];
@@ -132,9 +126,10 @@ class UILayer{
         for(var i=0;i< ui_object.elements.length;i++){
             var template_sprite = ui_object.elements[i].sprite_instance;
             var sprite_handle= texture_manager.GetTextureHandle(template_sprite.texture);
-            var static_sprite = new Sprite(sprite_handle, template_sprite.frame, template_sprite.strip);
+            var sprite_offset = new Vec3(-sprite_handle.width/2.0,sprite_handle.height,0);
+            var static_sprite = new Sprite(sprite_handle, template_sprite.frame, template_sprite.strip,sprite_offset);
             static_sprite.x = ui_object.elements[i].x;
-            static_sprite.y = ui_object.height - ui_object.elements[i].y;
+            static_sprite.y = 180-ui_object.elements[i].y;
             static_sprite.z = 0;
             static_sprite.hide = !(ui_object.elements[i].enabled);
             this.sprites.push(static_sprite);
@@ -155,8 +150,8 @@ class UILayer{
     Update (delta) {
     }
 
-    Paint(){
-        this.renderer.Paint(this.camera);
+    Paint(screen_camera){
+        this.renderer.Paint(screen_camera);
     }
 
 

@@ -5,13 +5,17 @@
     <title>Website</title>
   </head>
   <body>
-    <canvas id="canvas" width="800" height="640"></canvas>
+    <canvas id="canvas"></canvas>
   </body>
   <script> 
   //global constants
+     const canvas_height = 1000;
+     const canvas_width = 600;
      var canvas = document.getElementById("canvas");
+     canvas.width = canvas_height;
+     canvas.height = canvas_width;
      var gl = canvas.getContext("webgl", { alpha: false });
-     gl.viewport(0,0,800,640);
+     gl.viewport(0,0,canvas_height,canvas_width);
   </script>
   <script src="src/gfx/structs.js"></script>
   <script src="src/gfx/shader.js"></script>

@@ -23,6 +23,8 @@ class Sprite{
         var sprite_width = texture_handle.width/this.frames;
         var sprite_height = texture_handle.height/this.strips;
 
+
+
         var offset_x = 0;
         var offset_y = 0;
         var offset_z = 0;
@@ -43,13 +45,17 @@ class Sprite{
 			-sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
 			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z
         ]);
+
+        var half_px_x = 0.2/texture_handle.width;
+        var half_px_y = 0.2/texture_handle.height;
+
         var texcoords = new Float32Array([
-			0.005,0.995,
-			0.995,0.995,
-			0.995,0.005,
-			0.995,0.005,
-			0.005,0.005,
-			0.005,0.995
+			half_px_x,1-half_px_y,
+			1-half_px_x,1-half_px_y,
+			1-half_px_x ,half_px_y,
+			1-half_px_x,half_px_y,
+			half_px_x,half_px_y,
+			half_px_x,1-half_px_y
         ]);
 
         gl.bindBuffer(gl.ARRAY_BUFFER,this.vertex_buffer);
