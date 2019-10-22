@@ -14,58 +14,31 @@ class Scene{
         
 
         this.camera = new Camera();
-            this.camera.x = 4.5;
-            this.camera.y = 3;
-            this.camera.z = 12;
+            this.camera.x = 0;
+            this.camera.y = 0;
+            this.camera.z = 2;
 
-        this.floor = new Floor();
-        this.active_rooms = [];
-
-        this.LoadRoom(this.floor.getPlayerSpawnRoom());
+        this.level = [];
         this.entities = [];
         
-        var cylinder_tex = texture_manager.AddTextureHandle("enemy",ATLAS_0,0,0,32,32);
+        var knight_tex = texture_manager.AddTextureHandle("knight_torso",ATLAS_0,256,0,48,128,1,1);
 
-        var box_entity = new Entity();
-            box_entity.draw = new DrawManagerComponent();
-            box_entity.draw.Add(new CylinderPrimitive(2,1,cylinder_tex),this.renderer);
-            box_entity.draw.Add(new CylinderPrimitive(0.2,1.5,cylinder_tex,new Vec3(0,1.5,0)),this.renderer);
+        var knight_entity = new Entity();
+            knight_entity.draw = new DrawManagerComponent();
+            
+            var knight_sprite=new Sprite(knight_tex,0,0)
 
-            box_entity.player = new PlayerControlComponent();
-            box_entity.movement = new MovementComponent(10,0.1);
-            box_entity.camera_target = new CameraTargetComponent();
-            box_entity.phys = new PhysicsComponent();
+            knight_entity.draw.Add(knight_sprite,this.renderer);
+            knight_entity.player = new PlayerControlComponent();
+            knight_entity.movement = new MovementComponent(10,0.1);
+            //knight_entity.camera_target = new CameraTargetComponent();
+            knight_entity.phys = new PhysicsComponent();
 
-        box_entity.y = 0.5;
-        this.entities.push(box_entity);
-
-        this.cube = new CubePrimitive(1,1,1,cylinder_tex);
-        this.cube.x = 8;
-        this.cube.y = 4;
-        this.cube.z = 4;
-        this.cube.rotation.x = 45;
-        this.cube.rotation.z = 45;
-
-        this.renderer.Add(this.cube);
-    }
-
-    LoadRoom(room){
-        this.active_rooms.push(room);
-
-        this.renderer.Add(room);
-
-        for(var i=0;i< room.markers;i++){
-
-        }
-    }
-
-    UnloadRoom(room){
-        var room_id = this.active_rooms.indexOf(room);
-        this.active_rooms.splice(room_id,1);
+            knight_entity.y = 0.5;
+        this.entities.push(knight_entity);
     }
 
     Update(delta){
-        this.cube.rotation.y += (0.1*delta);
         var current_entity;
 
         for(var i=0; i< this.entities.length; i++){

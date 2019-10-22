@@ -22,8 +22,6 @@ class Room{
         var zmin = Math.floor(camera.z/GLOBAL_TILE_SIZE)-NEG_VIEW_DISTANCE;
         var zmax = Math.ceil(camera.z/GLOBAL_TILE_SIZE)+NEG_VIEW_DISTANCE;
 
-        
-
         var cam_turn = camera.rotation.y;
         while(cam_turn < 0){cam_turn += 360;}
         while(cam_turn > 360){cam_turn -= 360;}
@@ -40,8 +38,6 @@ class Room{
 
         if(xmin < 0){xmin=0;}   if(xmax >= this.width){xmax = this.width-1;}
         if(zmin < 0){zmin=0;}   if(zmax >= this.height){zmax = this.height-1;}
-
-        
 
         for(var h=0;h<this.depth;h++){
             for(var i=zmin;i<zmax;i++){

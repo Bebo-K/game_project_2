@@ -25,16 +25,41 @@ function main() {
     input = new Input();
     document.addEventListener('keydown', input_keydown, false);
     document.addEventListener('keyup', input_keyup, false);
+    document.addEventListener('pointerlockchange', lock_cursor_event, false);
+    document.addEventListener('mozpointerlockchange', lock_cursor_event, false);
+    
+    canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+    
+    document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+    
+    
+    canvas.onclick = function() {canvas.requestPointerLock();}
+    
+
+
     window.requestAnimationFrame(game_loop);
 
 }
 
+
+
 function input_keydown(event){
     input.OnKeyEvent(event.keyCode,true);
 }
-function input_keyup(){
+function input_keyup(event){
     input.OnKeyEvent(event.keyCode,false);
 }
 
+function input_mouseMove(event) {
+    input.OnMouseMove(event.movementX,event.movementY);
+}
+
+function lock_cursor_event() {
+    if (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas) {
+      document.addEventListener("mousemove", input_mouseMove, false);
+    } else {
+      document.removeEventListener("mousemove", input_mouseMove, false);
+    }
+}
 
 main();

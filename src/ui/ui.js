@@ -3,7 +3,7 @@ class UI{
 
     constructor(){        
         this.ui_layers = [];
-        this.ui_layers.push(new UILayer(overlay_template));        
+        //this.ui_layers.push(new UILayer(overlay_template));        
         this.camera = new Camera();
         this.camera.ortho = true;
         this.camera.width = 300;//250

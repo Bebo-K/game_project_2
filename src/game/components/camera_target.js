@@ -5,7 +5,7 @@ class CameraTargetComponent{
         this.turn=0;
 		this.zoom=1;
 		this.pitch=0;
-		this.offset=new Vec3(0,12,12);
+		this.offset=new Vec3(0,0,12);
         this.zoom_min=1;
         this.zoom_max=10;
         this.zoom_min_tilt=10;
@@ -39,7 +39,7 @@ class CameraTargetSystem{
         if(input.cam_cw){entity.camera_target.turn -= seconds*this.turn_sensitivity;}
 		if(input.cam_ccw){entity.camera_target.turn += seconds*this.turn_sensitivity;}
 		
-        var cam_offset = entity.camera_target.offset.Rotate_Y(entity.camera_target.turn);
+        var cam_offset = entity.camera_target.offset;//.Rotate_Y(entity.camera_target.turn);
         cam_offset.x *= entity.camera_target.zoom;
         cam_offset.y *= entity.camera_target.zoom;
         cam_offset.z *= entity.camera_target.zoom;

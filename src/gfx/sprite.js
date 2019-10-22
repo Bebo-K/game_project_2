@@ -37,13 +37,14 @@ class Sprite{
         var sprite_width = this.texture.width;
         var sprite_height = this.texture.height;
 
+
         var verts = new Float32Array([
-			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z,
-			 sprite_width/2.0-offset_x,	-offset_y,				-offset_z,
-			 sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
-			 sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
-			-sprite_width/2.0-offset_x,	sprite_height-offset_y,	-offset_z,
-			-sprite_width/2.0-offset_x,	-offset_y,				-offset_z
+			-sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z,
+			 sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z,
+			 sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
+			 sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
+			-sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
+			-sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z
         ]);
 
         var half_px_x = 0.2/texture_handle.width;

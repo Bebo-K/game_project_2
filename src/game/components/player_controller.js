@@ -32,7 +32,20 @@ class PlayerControlSystem{
 
         if(this.HandleNoPlayerControlCase(entity)){return;}
 
-		var input_axis = new Vec3(input.horizontal,0,-input.vertical);
-        entity.movement.goal =  game.scene.camera.ToWorldSpace(input_axis);
+		//var input_axis = new Vec3(input.horizontal,0,-input.vertical);
+        //entity.movement.goal =  game.scene.camera.ToWorldSpace(input_axis);
+
+        var mouse_angle_vector =  [input.cursor_x,input.cursor_y];
+        var mouse_vector_length = Math.sqrt(input.cursor_x*input.cursor_x + input.cursor_y*input.cursor_y);
+        if(mouse_vector_length > 0.0){
+            mouse_angle_vector[0] /= mouse_vector_length;
+            mouse_angle_vector[1] /= mouse_vector_length;
+            entity.rotation.z =  Math.atan2(mouse_angle_vector[1],mouse_angle_vector[0])*(180/Math.PI);
+        }
+        else{
+            entity.rotation.z=0;
+        }
+
+
     }
 }
