@@ -5,18 +5,26 @@
     <title>Website</title>
   </head>
   <body>
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" style="width: 900px; height: 600px; 
+    display: block; margin: auto;"></canvas>
   </body>
+
   <script> 
   //global constants
-     const canvas_height = 1000;
-     const canvas_width = 600;
+     const canvas_height = 900*window.devicePixelRatio;
+     const canvas_width = 600* window.devicePixelRatio;
      var canvas = document.getElementById("canvas");
      canvas.width = canvas_height;
      canvas.height = canvas_width;
+     canvas.oncontextmenu=function(e){
+      e.preventDefault();
+      return false;
+    }
      var gl = canvas.getContext("webgl", { alpha: false });
      gl.viewport(0,0,canvas_height,canvas_width);
   </script>
+  <script src="dat/overlay.js"></script>
+  <script src="dat/menu.js"></script>
   <script src="src/gfx/structs.js"></script>
   <script src="src/gfx/shader.js"></script>
   <script src="src/gfx/textures.js"></script>
