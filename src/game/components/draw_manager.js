@@ -9,7 +9,7 @@ class DrawManagerComponent{
 
     Add(primitive,renderer){
         this.primitives.push(primitive);
-        this.offsets.push(new Vec3(primitive.x,primitive.y,primitive.z));
+        this.offsets.push(new Vec3(0,0,0));
         renderer.Add(primitive);
     }
 

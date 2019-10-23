@@ -15,6 +15,7 @@ class Entity{
         this.player = null;
         this.camera_target = null;
         this.phys=null;
+        this.collision=null;
 
         this.models =[];
         this.sprites =[];

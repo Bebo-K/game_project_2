@@ -7,16 +7,13 @@ class PhysicsComponent{
         this.is_midair = false;
 
     }
-
-
-
 }
 
 class PhysicsSystem{
 
     constructor(){
-        this.gravity =  -15.0;
-        this.terminal_velocity = -64;
+        this.gravity =  -100.0;
+        this.terminal_velocity = -10000;
         this.midair_velocity_damper = 0.75;
         this.ground_velocity_damper = 0.9999;
     }
@@ -37,10 +34,9 @@ class PhysicsSystem{
         var seconds = delta/1000.0
 
         if(entity.phys != null){
-            if(entity.enable_gravity && entity.velocity.y > this.terminal_velocity){
+            if(entity.phys.enable_gravity && entity.velocity.y > this.terminal_velocity){
                 entity.velocity.y += this.gravity*seconds;
             }
-            
         }
         
         //also handle generic movement
