@@ -25,7 +25,7 @@ class Scene{
         var knight_tex = texture_manager.AddTextureHandle("knight_torso",ATLAS_0,256,0,48,128,1,1);
 
         var knight_entity = new Entity();
-            knight_entity.y = 256;
+            knight_entity.y = 512;
             knight_entity.draw = new DrawManagerComponent();
             
             var knight_sprite=new Sprite(knight_tex,0,0)
@@ -33,7 +33,7 @@ class Scene{
             knight_entity.draw.Add(knight_sprite,this.renderer);
             knight_entity.player = new PlayerControlComponent();
             knight_entity.movement = new MovementComponent(10,0.1);
-            //knight_entity.camera_target = new CameraTargetComponent();
+            knight_entity.camera_target = new CameraTargetComponent();
             knight_entity.collision = new CollisionComponent();
                 knight_entity.collision.Add(new CollisionCircle(new Vec3(0,0,0),32))
             knight_entity.phys = new PhysicsComponent();

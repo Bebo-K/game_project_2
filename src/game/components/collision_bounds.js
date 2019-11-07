@@ -12,10 +12,10 @@ class CollisionCircle{
         this.radius = radius;
     }
     Collides_With(obstacle){    
-        if( this.x-obstacle.x > this.radius &&
-            obstacle.x+obstacle.w - this.x > this.radius &&
-            this.y-obstacle.y > this.radius &&
-            obstacle.y+obstacle.h - this.y > this.radius){
+        if( this.x - (obstacle.x + obstacle.w) < this.radius &&
+            obstacle.x - this.x < this.radius &&
+            this.y - (obstacle.y + obstacle.h) < this.radius &&
+            obstacle.y - this.y < this.radius){
                 return true;
             }
         return false;

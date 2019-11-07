@@ -1,15 +1,15 @@
 
 class Obstacle{
 
-    constructor(renderer,texture,corner_x,corner_y,w,h){
-        this.x = corner_x;
-        this.y = corner_y;
+    constructor(renderer,texture,center_x,center_y,w,h){
+        this.x = center_x-(w/2);
+        this.y = center_y-(h/2);
         this.w = w;
         this.h = h;
 
         this.sprite = new Sprite(texture,0,0);
-        this.sprite.x = this.x+(this.w/2.0);
-        this.sprite.y = this.y-(this.h/2.0);
+        this.sprite.x = center_x;
+        this.sprite.y = center_y;
         this.sprite.z = -0.1;
 
         this.sprite.scale.x = (this.w / this.sprite.texture.width)
@@ -17,25 +17,16 @@ class Obstacle{
 
         renderer.Add(this.sprite);
     }
-
-
-
 }
-
-
-
-
 
 class Level{
 
     constructor(level_data,renderer){
-
         var background_texture = texture_manager.AddTextureHandle("background",ATLAS_0,256,256,256,256,1,1);
         this.background = new Sprite(background_texture,0,0);
             this.background.z = -1;
             this.background.scale.x = 5;
             this.background.scale.y = 5;
-
 
         renderer.Add(this.background);
 
@@ -43,14 +34,14 @@ class Level{
 
         this.obstacles = [];
 
-            this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,-100,-128,256,186));
+        this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,0,0,256,186));
+        this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,-256,0,256,186));
+        this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,256,0,256,186));
 
-
-        
+        this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,256,512,256,186));
+        this.obstacles.push(new Obstacle(renderer,dirt_patch_texture,-256,512,256,186));
 
     }
-
-
 
     Update(delta,entities){
         for(var i=0; i < entities.length; i++){
@@ -58,9 +49,16 @@ class Level{
                 for(var j=0;j<entities[i].collision.areas.length;j++){
                     for(var k=0;k<this.obstacles.length;k++){
                         if(entities[i].collision.areas[j].Collides_With(this.obstacles[k])){
-                            entities[i].velocity.x *= -1;
-                            entities[i].velocity.y *= -1;
-                            entities[i].velocity.z *= -1;
+
+                            var velocity_mag = entities[i].velocity.Length();
+
+                            var bounce_dir = new Vec3(0,velocity_mag,0);
+
+                            var bounce = bounce_dir.Rotate_Z(entities[i].rotation.z);
+
+                            entities[i].velocity.x = bounce.x;
+                            entities[i].velocity.y = bounce.y;
+                            entities[i].velocity.z = bounce.z;
                         }
                     }
                 }

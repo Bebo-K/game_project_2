@@ -36,9 +36,9 @@ class Sprite{
         var verts = new Float32Array([
 			-sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z,
 			 sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z,
-			 sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
-			 sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
-			-sprite_width/2.0-offset_x,	sprite_height/2.0-offset_y,     -offset_z,
+			 sprite_width/2.0-offset_x,	 sprite_height/2.0-offset_y,    -offset_z,
+			 sprite_width/2.0-offset_x,	 sprite_height/2.0-offset_y,    -offset_z,
+			-sprite_width/2.0-offset_x,	 sprite_height/2.0-offset_y,    -offset_z,
 			-sprite_width/2.0-offset_x,	-sprite_height/2.0-offset_y,    -offset_z
         ]);
 
