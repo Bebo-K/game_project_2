@@ -3,6 +3,12 @@
 class Input{
 
     constructor(){
+        this.cursor_raw_x = canvas_width/2;
+        this.cursor_raw_y = canvas_height/2;
+        this.cursor_x = 0.0;
+        this.cursor_y = 0.0;
+        this.joystick_x = 0.0;
+        this.joystick_y = 0.0;
         this.left=false;
         this.right=false;
         this.up=false;
@@ -50,4 +56,33 @@ class Input{
             this.vertical *= rescale;
         }
     }
+
+    OnMouseMove(delta_x,delta_y){
+        this.cursor_raw_x += delta_x;
+            if(this.cursor_raw_x > canvas_width){this.cursor_raw_x = canvas_width}
+            if(this.cursor_raw_x < 0){this.cursor_raw_x = 0}
+        
+        this.cursor_raw_y += delta_y;
+        if(this.cursor_raw_y > canvas_height){this.cursor_raw_y = canvas_height}
+        if(this.cursor_raw_y < 0){this.cursor_raw_y = 0}
+
+        this.cursor_x += delta_x;//((this.cursor_raw_x*2.0)/canvas_width) - 1.0;
+        this.cursor_y += delta_y;//((this.cursor_raw_y*2.0)/canvas_height) - 1.0;
+        
+        var cursor_radius = Math.sqrt(0.0 + this.cursor_x*this.cursor_x + this.cursor_y*this.cursor_y);
+        var cursor_radius_target = 100.0;
+        
+        if(cursor_radius > 0.0){
+
+            this.cursor_x *= (cursor_radius_target/cursor_radius);
+            this.cursor_y *= (cursor_radius_target/cursor_radius);
+
+            this.joystick_x = this.cursor_x/cursor_radius;
+            this.joystick_y = this.cursor_y/cursor_radius;
+
+        }
+    }
 }
+
+
+

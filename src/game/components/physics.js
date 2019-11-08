@@ -7,26 +7,17 @@ class PhysicsComponent{
         this.is_midair = false;
 
     }
-
-
-
 }
 
 class PhysicsSystem{
 
     constructor(){
-        this.gravity =  -15.0;
-        this.terminal_velocity = -64;
+        this.gravity =  -100.0;
+        this.terminal_velocity = -10000;
         this.midair_velocity_damper = 0.75;
         this.ground_velocity_damper = 0.9999;
     }
     
-    ApplyMidairVelocityDampening(entity,seconds){
-		var damper_amount = Math.pow(1-this.midair_velocity_damper,seconds);
-		entity.velocity.x *= damper_amount;
-		entity.velocity.z *= damper_amount;
-	}
-	
 	ApplySlidingVelocityDampening(entity,seconds){
 		var damper_amount = Math.pow(1-this.ground_velocity_damper,seconds);
 		entity.velocity.x *= damper_amount;
@@ -37,10 +28,10 @@ class PhysicsSystem{
         var seconds = delta/1000.0
 
         if(entity.phys != null){
-            if(entity.enable_gravity && entity.velocity.y > this.terminal_velocity){
+            if(entity.phys.enable_gravity && entity.velocity.y > this.terminal_velocity){
                 entity.velocity.y += this.gravity*seconds;
+                entity.phys.is_midair=true;
             }
-            
         }
         
         //also handle generic movement
@@ -49,10 +40,7 @@ class PhysicsSystem{
         entity.z += seconds*entity.velocity.z;
 
         if(entity.phys != null){
-            if(entity.phys.is_midair){
-                this.ApplyMidairVelocityDampening(entity,seconds);
-            }
-            else {
+            if(!entity.phys.is_midair){
                 this.ApplySlidingVelocityDampening(entity,seconds);
             }
         }

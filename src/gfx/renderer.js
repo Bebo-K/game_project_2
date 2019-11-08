@@ -1,19 +1,17 @@
 
-const weird_stretch_factor_that_happens_in_web_browsers = 0.8;
-
 
 class Camera{
     constructor(){
-        this.ortho = false;
+        this.ortho = true;
         this.width = canvas_height;
-        this.height = canvas_width*weird_stretch_factor_that_happens_in_web_browsers;
+        this.height = canvas_width;
         this.fov = 60;
         this.near = 1.0;
         this.far = 100.0;
         this.x = 0;
         this.y = 0;
         this.z = 0;
-        this.rotation = new Vec3(-40,0,0);
+        this.rotation = new Vec3(0,0,0);
         this.shader = new Shader();
     }
     SetToCameraSpace(mat){

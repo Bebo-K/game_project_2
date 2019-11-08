@@ -9,7 +9,7 @@ class DrawManagerComponent{
 
     Add(primitive,renderer){
         this.primitives.push(primitive);
-        this.offsets.push(new Vec3(primitive.x,primitive.y,primitive.z));
+        this.offsets.push(new Vec3(0,0,0));
         renderer.Add(primitive);
     }
 
@@ -35,7 +35,8 @@ class DrawManagerSystem{
             entity.draw.primitives[i].x = entity.x + entity.draw.offsets[i].x;
             entity.draw.primitives[i].y = entity.y + entity.draw.offsets[i].y;
             entity.draw.primitives[i].z = entity.z + entity.draw.offsets[i].z;
-            entity.draw.primitives[i].rotation.y = entity.rotation.y;
+            //entity.draw.primitives[i].rotation.y = entity.rotation.y;
+            entity.draw.primitives[i].rotation.z = entity.rotation.z;
         }
     }
 }

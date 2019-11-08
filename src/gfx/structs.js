@@ -5,6 +5,13 @@ class Vec3{
         this.z=z;
     }
 
+    Length(){
+        return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
+    }
+    LengthSquared(){
+        return this.x*this.x + this.y*this.y + this.z*this.z;
+    }
+
     Rotate_X(theta){
         var rx = -theta*Math.PI/180;
         var cos = Math.cos(rx);
