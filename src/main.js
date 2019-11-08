@@ -25,6 +25,7 @@ function start(){
     document.addEventListener('keyup', input_keyup, false);
     document.addEventListener('pointerlockchange', lock_cursor_event, false);
     document.addEventListener('mozpointerlockchange', lock_cursor_event, false);
+    document.addEventListener('wheel',scroll_wheel_event, false);
     
     canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
     
@@ -45,6 +46,10 @@ function input_keydown(event){
 }
 function input_keyup(event){
     input.OnKeyEvent(event.keyCode,false);
+}
+
+function scroll_wheel_event(event){
+    input.OnMouseScroll(event.deltaY);
 }
 
 function input_mouseMove(event) {

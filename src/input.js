@@ -3,23 +3,18 @@
 class Input{
 
     constructor(){
-        this.cursor_raw_x = canvas_width/2;
-        this.cursor_raw_y = canvas_height/2;
-        this.cursor_x = 0.0;
-        this.cursor_y = 0.0;
+        this.cursor_x = canvas_width/2;
+        this.cursor_y = canvas_height/2;
+        this.radial_cursor_x = 0.0;
+        this.radial_cursor_y = 0.0;
+        this.radial_cursor_target = 75.0;
+        this.radial_cursor_angle = 0;
         this.joystick_x = 0.0;
         this.joystick_y = 0.0;
-        this.left=false;
-        this.right=false;
-        this.up=false;
-        this.down=false;
-        this.vertical = 0.0;
-        this.horizontal = 0.0;
+
         this.jump = false;
-        this.A = false;
-        this.B = false;
-        this.debug1 = false;
-        this.debug2 = false;
+        this.action_1 = false;
+        this.action_2 = false;
     }
 
     //TODO: on joystick event
@@ -27,10 +22,6 @@ class Input{
     OnKeyEvent(action_code,fire){
         let left=false,right=false,up=false,down=false;
         switch(action_code){
-            case 65: this.left=fire;break;
-            case 68: this.right=fire;break;
-            case 87: this.up=fire;break;
-            case 83: this.down=fire;break;
             case 32: this.jump=fire;break;
             case 81: this.cam_cw=fire;break;
             case 69: this.cam_ccw=fire;break;
@@ -38,50 +29,46 @@ class Input{
             case 75: this.debug2=fire;break;
             default:break;
         }
-        this.setVirtualJoystick();
-    }
-
-    setVirtualJoystick(){
-        this.horizontal = 0.0;
-        this.vertical = 0.0;
-        if(this.left){this.horizontal -= 1.0;}
-        if(this.right){this.horizontal += 1.0;}
-        if(this.up){this.vertical += 1.0}
-        if(this.down){this.vertical -= 1.0}
-
-        let length_sqr = this.horizontal*this.horizontal + this.vertical*this.vertical;
-        if(length_sqr > 1.0){
-            let rescale = 1.0/Math.sqrt(length_sqr);
-            this.horizontal *= rescale;
-            this.vertical *= rescale;
-        }
     }
 
     OnMouseMove(delta_x,delta_y){
-        this.cursor_raw_x += delta_x;
-            if(this.cursor_raw_x > canvas_width){this.cursor_raw_x = canvas_width}
-            if(this.cursor_raw_x < 0){this.cursor_raw_x = 0}
+        this.cursor_x += delta_x;
+            if(this.cursor_x > canvas_width){this.cursor_x = canvas_width}
+            if(this.cursor_x < 0){this.cursor_x = 0}
         
-        this.cursor_raw_y += delta_y;
-        if(this.cursor_raw_y > canvas_height){this.cursor_raw_y = canvas_height}
-        if(this.cursor_raw_y < 0){this.cursor_raw_y = 0}
+        this.cursor_x += delta_y;
+            if(this.cursor_x > canvas_height){this.cursor_x = canvas_height}
+            if(this.cursor_x < 0){this.cursor_x = 0}
 
-        this.cursor_x += delta_x;//((this.cursor_raw_x*2.0)/canvas_width) - 1.0;
-        this.cursor_y += delta_y;//((this.cursor_raw_y*2.0)/canvas_height) - 1.0;
+        this.radial_cursor_x += delta_x;//((this.cursor_raw_x*2.0)/canvas_width) - 1.0;
+        this.radial_cursor_y += delta_y;//((this.cursor_raw_y*2.0)/canvas_height) - 1.0;
         
-        var cursor_radius = Math.sqrt(0.0 + this.cursor_x*this.cursor_x + this.cursor_y*this.cursor_y);
-        var cursor_radius_target = 100.0;
+        var cursor_radius = Vec2.Length(this.radial_cursor_x,this.radial_cursor_y);
         
         if(cursor_radius > 0.0){
 
-            this.cursor_x *= (cursor_radius_target/cursor_radius);
-            this.cursor_y *= (cursor_radius_target/cursor_radius);
+            this.joystick_x = this.radial_cursor_x/cursor_radius;
+            this.joystick_y = this.radial_cursor_y/cursor_radius;
 
-            this.joystick_x = this.cursor_x/cursor_radius;
-            this.joystick_y = this.cursor_y/cursor_radius;
+            this.radial_cursor_x *= (this.radial_cursor_target/cursor_radius);
+            this.radial_cursor_y *= (this.radial_cursor_target/cursor_radius);
 
         }
     }
+
+    OnMouseScroll(scroll_amount){
+
+        this.radial_cursor_angle += scroll_amount*0.1;
+        if(this.radial_cursor_angle < -90){this.radial_cursor_angle=-90;}
+        if(this.radial_cursor_angle > 90){this.radial_cursor_angle = 90;};
+
+    }
+
+    ZeroJoystick(){
+        this.joystick_x=0;
+        this.joystick_y=0;
+    }
+
 }
 
 

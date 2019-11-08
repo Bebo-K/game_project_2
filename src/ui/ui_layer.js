@@ -26,7 +26,6 @@ class UILayer{
             var static_sprite = new Sprite(sprite_handle, template_sprite.frame, template_sprite.strip,sprite_offset);
             static_sprite.x = this.template.elements[i].x;
             static_sprite.y = -this.template.elements[i].y;
-            static_sprite.z = 0;
             static_sprite.hide = !(this.template.elements[i].enabled);
             this.sprites.push(static_sprite);
             this.renderer.Add(static_sprite);

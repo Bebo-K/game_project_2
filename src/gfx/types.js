@@ -1,3 +1,26 @@
+
+
+Vec2 = {
+    Length(x,y){return Math.sqrt(x*x + y*y);},
+    Length2(x,y){return x*x+y*y;},
+    Rotate(x,y,r){
+        var theta = -r*Math.PI/180;
+        var cos = Math.cos(theta);
+        var sin = Math.sin(theta);
+        return {
+            x: x*cos - y*sin,
+            y: x*sin + y*cos
+        }
+     },
+     Angle(x,y){
+        if(this.Length2(x,y) < 0.00000001){return 0;}
+        return Math.atan2(y,x)*(180/Math.PI);
+     },
+     NonZero(x,y){
+         return (x*x+y*y > 0.00001);
+     }
+}
+
 class Vec3{
     constructor(x,y,z){
         this.x=x;
@@ -188,7 +211,7 @@ class Matrix{
 
     TransformToSpace(object){
         this.Translate(object.x,object.y,object.z);
-        this.Rotate(object.rotation);
+        this.Rotate_Z(object.rotation);
         this.Scale(object.scale);
     }
 

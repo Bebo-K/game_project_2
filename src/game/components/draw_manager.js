@@ -2,15 +2,19 @@
 
 class DrawManagerComponent{
 
-    constructor(){
+    constructor(renderer){
+        this.renderer_instance = renderer;
         this.primitives = [];
         this.offsets = [];
     }
 
-    Add(primitive,renderer){
+    Add(primitive,offset){
         this.primitives.push(primitive);
-        this.offsets.push(new Vec3(0,0,0));
-        renderer.Add(primitive);
+        if(offset != null){
+            this.offsets.push(offset);
+        }
+        this.offsets.push({x:0,y:0,r:0});
+        this.renderer_instance.Add(primitive);
     }
 
 
@@ -19,9 +23,7 @@ class DrawManagerComponent{
 
 class DrawManagerSystem{
 
-    constructor(renderer){
-        this.renderer = renderer;
-
+    constructor(){
     }
 
     ValidEntity(entity){
@@ -34,9 +36,7 @@ class DrawManagerSystem{
 
             entity.draw.primitives[i].x = entity.x + entity.draw.offsets[i].x;
             entity.draw.primitives[i].y = entity.y + entity.draw.offsets[i].y;
-            entity.draw.primitives[i].z = entity.z + entity.draw.offsets[i].z;
-            //entity.draw.primitives[i].rotation.y = entity.rotation.y;
-            entity.draw.primitives[i].rotation.z = entity.rotation.z;
+            entity.draw.primitives[i].rotation = entity.rotation + entity.draw.offsets[i].r;
         }
     }
 }

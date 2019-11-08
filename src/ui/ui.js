@@ -13,8 +13,7 @@ class UI{
         this.camera.far = 100.0;
         this.camera.x = this.camera.width/2;
         this.camera.y = -this.camera.height/2;
-        this.camera.z = 1;
-        this.camera.rotation = new Vec3(0,0,0);
+        this.camera.rotation = 0.0;
         this.camera.shader = new Shader();
 
     }

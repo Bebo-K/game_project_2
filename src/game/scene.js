@@ -8,7 +8,6 @@ class Scene{
 
         this.draw_manager = new DrawManagerSystem();
         this.camera_target = new CameraTargetSystem();
-        this.movement = new MovementSystem();
         this.physics = new PhysicsSystem();
         this.player_controller = new PlayerControlSystem();
         this.collision_bounds = new CollisionSystem();
@@ -17,26 +16,26 @@ class Scene{
         this.camera = new Camera();
             this.camera.x = 0;
             this.camera.y = 0;
-            this.camera.z = 2;
+            this.camera.z = 10;
 
         this.level = new Level(0,this.renderer);
         this.entities = [];
         
         var knight_tex = texture_manager.AddTextureHandle("knight_torso",ATLAS_0,256,0,48,128,1,1);
+            var knight_sprite=new Sprite(knight_tex,0,0);
+
+           // cursor_sprite.scale = new Vec3(1.8,1.8,1.8);
 
         var knight_entity = new Entity();
             knight_entity.y = 512;
-            knight_entity.draw = new DrawManagerComponent();
-            
-            var knight_sprite=new Sprite(knight_tex,0,0)
-
-            knight_entity.draw.Add(knight_sprite,this.renderer);
-            knight_entity.player = new PlayerControlComponent();
-            knight_entity.movement = new MovementComponent(10,0.1);
+            knight_entity.draw = new DrawManagerComponent(this.renderer);
+                knight_entity.draw.Add(knight_sprite);
+            knight_entity.player = new PlayerControlComponent(knight_entity);
             knight_entity.camera_target = new CameraTargetComponent();
-            knight_entity.collision = new CollisionComponent();
-                knight_entity.collision.Add(new CollisionCircle(new Vec3(0,0,0),32))
             knight_entity.phys = new PhysicsComponent();
+            knight_entity.collision = new CollisionComponent();
+                knight_entity.collision.Add(new CollisionCircle(0,-64,3,0));
+                //knight_entity.collision.Add(new CollisionCircle(new Vec3(0,16,0),8));
 
         this.entities.push(knight_entity);
     }
@@ -47,7 +46,6 @@ class Scene{
         for(var i=0; i< this.entities.length; i++){
             current_entity = this.entities[i];
 
-            this.movement.Update(current_entity,delta);
             this.physics.Update(current_entity,delta);
             this.player_controller.Update(current_entity,delta);
             this.draw_manager.Update(current_entity,delta);
@@ -59,7 +57,7 @@ class Scene{
 
     }
 
-    Draw(){
+    Paint(){
         this.renderer.Paint(this.camera);
     }
 

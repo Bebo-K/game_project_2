@@ -5,23 +5,15 @@ class Camera{
         this.ortho = true;
         this.width = canvas_height;
         this.height = canvas_width;
-        this.fov = 60;
         this.near = 1.0;
         this.far = 100.0;
         this.x = 0;
         this.y = 0;
-        this.z = 0;
-        this.rotation = new Vec3(0,0,0);
+        this.z = 1;
         this.shader = new Shader();
     }
     SetToCameraSpace(mat){
-        if(this.rotation.x != 0){mat.Rotate_X(this.rotation.x);}
-        if(this.rotation.y != 0){mat.Rotate_Y(this.rotation.y);}
-        if(this.rotation.z != 0){mat.Rotate_Z(this.rotation.z);}
-        mat.Translate(-this.x,-this.y,-this.z);
-    }
-    ToWorldSpace(vector){
-        return vector.Rotate_Y(this.rotation.y);
+       mat.Translate(-this.x,-this.y,-this.z);
     }
 }
 

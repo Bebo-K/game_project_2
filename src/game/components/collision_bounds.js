@@ -2,14 +2,14 @@
 
 class CollisionCircle{
 
-    constructor(offset,radius){
+    constructor(offset_x,offset_y,radius,flags){
         this.x = 0;
         this.y = 0;
-        this.z = 0;
 
-        this.offset = new Vec3(offset.x,offset.y,offset.z);
-
-        this.radius = radius;
+        this.offset_x=offset_x;
+        this.offset_y=offset_y;
+        this.radius =radius;
+        this.flags = flags;
     }
     Collides_With(obstacle){    
         if( this.x - (obstacle.x + obstacle.w) < this.radius &&
@@ -33,30 +33,3 @@ class CollisionComponent{
 
 }
 
-class CollisionSystem{
-
-    constructor(renderer){
-        this.renderer = renderer;
-
-    }
-
-    ValidEntity(entity){
-        return (entity.collision != null);
-    }
-
-    Update(entity,delta){
-        if(!this.ValidEntity(entity))return;
-        for(var i=0;i< entity.collision.areas.length;i++){
-
-            var rotated_offset = new Vec3(
-                entity.collision.areas[i].offset.x,
-                entity.collision.areas[i].offset.y,
-                entity.collision.areas[i].offset.z)
-
-
-            entity.collision.areas[i].x = entity.x + rotated_offset.x
-            entity.collision.areas[i].y = entity.y + rotated_offset.y
-            entity.collision.areas[i].z = entity.z + rotated_offset.z
-        }
-    }
-}
